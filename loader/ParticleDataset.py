@@ -1,0 +1,142 @@
+import torch
+from torch.utils.data import Dataset
+import numpy as np
+import os
+import json
+
+
+class ParticleDataset(Dataset):
+    def __init__(self, filenames, transform=None,
+                 normalize=True, normalize_label=False,  # ← 标签不归一化
+                 input_mean=None, input_std=None):
+        """
+        粒子数据加载器
+        Args:
+            filenames: 包含输入和标签文件路径的字典列表
+            transform: 数据变换
+            normalize: 是否对输入进行归一化
+            normalize_label: 是否对标签进行归一化（默认False）
+            input_mean/std: 输入归一化参数
+        """
+        self.filenames = filenames
+        self.transform = transform
+        self.normalize = normalize
+        self.normalize_label = normalize_label
+
+        self.input_mean = np.array(input_mean) if input_mean is not None else None
+        self.input_std = np.array(input_std) if input_std is not None else None
+
+        # 仅当 normalize=True 且未提供统计参数时计算
+        if self.normalize and (self.input_mean is None or self.input_std is None):
+            self.compute_normalization_parameters()
+
+        print(f"✅ Input normalization: {self.normalize}")
+        print(f"❌ Label normalization disabled")
+        if self.normalize and self.input_mean is not None:
+            print(f"Input mean={self.input_mean}, std={self.input_std}")
+
+    def __len__(self):
+        return len(self.filenames)
+
+    # ------------------------------
+    # 计算输入归一化参数（仅在训练中使用）
+    # ------------------------------
+    def compute_normalization_parameters(self):
+        print("Computing normalization parameters for input...")
+        input_sums = np.zeros(4)
+        input_sq_sums = np.zeros(4)
+        input_counts = np.zeros(4)
+
+        for filename_info in self.filenames:
+            input_filename = filename_info["image"]
+            if not os.path.exists(input_filename):
+                continue
+            input_data = np.loadtxt(input_filename)
+            input_data = self._reshape_input_data(input_data)
+            for c in range(4):
+                flat = input_data[c].flatten()
+                input_sums[c] += np.sum(flat)
+                input_sq_sums[c] += np.sum(flat ** 2)
+                input_counts[c] += len(flat)
+
+        self.input_mean = input_sums / input_counts
+        self.input_std = np.sqrt(input_sq_sums / input_counts - self.input_mean ** 2)
+        self.input_std = np.maximum(self.input_std, 1e-8)
+        print("✅ Normalization parameters computed for input.")
+
+    # ------------------------------
+    # 数据加载与变换
+    # ------------------------------
+    def _reshape_input_data(self, input_data):
+        """将输入(22500, 4) reshape 为 (C=4, D=3, H=250, W=30)"""
+        if input_data.shape != (22500, 4):
+            raise ValueError(f"Expected input shape (22500, 4), got {input_data.shape}")
+        input_data = input_data.reshape(3, 250, 30, 4)
+        input_data = input_data.transpose(3, 0, 1, 2)
+        return input_data
+
+    def _normalize_data(self, data, mean, std):
+        return (data - mean) / std
+
+    def __getitem__(self, idx):
+        info = self.filenames[idx]
+        input_path = info["image"]
+        label_path = info["label"]
+
+        # --- 加载输入 ---
+        input_data = np.loadtxt(input_path)
+        input_data = self._reshape_input_data(input_data)
+
+        if self.normalize and self.input_mean is not None and self.input_std is not None:
+            for c in range(4):
+                input_data[c] = self._normalize_data(input_data[c], self.input_mean[c], self.input_std[c])
+
+        # --- 加载标签 ---
+        output_data = np.loadtxt(label_path)
+
+        # 如果标签是二维的，取第二列
+        if output_data.ndim == 2 and output_data.shape[1] >= 2:
+            output_data = output_data[:, 1]
+
+        # 如果标签和输入一样长(22500)，则按规则聚合成250个点
+        if len(output_data) == 22500:
+            output_data = output_data.reshape(250, 90).mean(axis=1)
+
+        # ⚠️ 不对标签进行归一化
+        input_tensor = torch.from_numpy(input_data).float()
+        output_tensor = torch.from_numpy(output_data).float()
+
+        return {
+            "image": input_tensor,
+            "label": output_tensor,
+            "filename": os.path.splitext(os.path.basename(input_path))[0]
+        }
+
+    # ------------------------------
+    # 工具函数
+    # ------------------------------
+    def get_normalization_params(self):
+        """仅返回输入归一化参数"""
+        return {
+            'input_mean': self.input_mean,
+            'input_std': self.input_std
+        }
+
+    @classmethod
+    def load_normalization_params(cls, path):
+        with open(path, "r") as f:
+            params = json.load(f)
+        for k, v in params.items():
+            if isinstance(v, list):
+                params[k] = np.array(v)
+        return params
+
+    def save_normalization_params(self, path):
+        """保存输入归一化参数"""
+        params = {
+            'input_mean': self.input_mean.tolist() if self.input_mean is not None else None,
+            'input_std': self.input_std.tolist() if self.input_std is not None else None
+        }
+        with open(path, "w") as f:
+            json.dump(params, f, indent=4)
+        print(f"Normalization parameters saved to {path}")

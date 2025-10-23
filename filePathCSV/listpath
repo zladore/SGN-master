@@ -1,0 +1,152 @@
+import os
+import pandas as pd
+
+def list_directory_contents_recursive(directory_path, max_depth=None, current_depth=0):
+    """
+    递归列出指定目录下的所有子文件和子文件夹
+
+    Args:
+        directory_path (str): 要扫描的目录路径
+        max_depth (int): 最大递归深度，None表示无限制
+        current_depth (int): 当前递归深度（内部使用）
+    """
+    try:
+        # 检查目录是否存在
+        if not os.path.exists(directory_path):
+            print(f"错误: 目录 '{directory_path}' 不存在")
+            return []
+
+        # 如果超过最大深度，则停止递归
+        if max_depth is not None and current_depth > max_depth:
+            return []
+
+        # 获取目录下的所有直接子项
+        items = os.listdir(directory_path)
+
+        # 准备数据列表
+        data = []
+
+        for item in items:
+            item_path = os.path.join(directory_path, item)
+
+            # 获取文件/文件夹信息
+            if os.path.isfile(item_path):
+                item_type = "文件"
+                size = os.path.getsize(item_path)
+                extension = os.path.splitext(item)[1] or "无扩展名"
+                relative_path = os.path.relpath(item_path, directory_path)
+
+                data.append({
+                    "名称": item,
+                    "类型": item_type,
+                    "大小(B)": size,
+                    "扩展名": extension,
+                    "完整路径": item_path,
+                    "相对路径": relative_path,
+                    "深度": current_depth
+                })
+            else:
+                # 是文件夹，先记录文件夹本身
+                item_type = "文件夹"
+                relative_path = os.path.relpath(item_path, directory_path)
+
+                data.append({
+                    "名称": item,
+                    "类型": item_type,
+                    "大小(B)": "-",
+                    "扩展名": "-",
+                    "完整路径": item_path,
+                    "相对路径": relative_path,
+                    "深度": current_depth
+                })
+
+                # 递归处理子文件夹
+                sub_data = list_directory_contents_recursive(
+                    item_path, max_depth, current_depth + 1)
+                data.extend(sub_data)
+
+        return data
+
+    except PermissionError:
+        print(f"警告: 没有权限访问目录 '{directory_path}'")
+        return []
+    except Exception as e:
+        print(f"错误: {e}")
+        return []
+
+def display_directory_structure(directory_path, max_depth=None):
+    """
+    显示目录结构
+
+    Args:
+        directory_path (str): 要显示的目录路径
+        max_depth (int): 最大显示深度
+    """
+    print(f"\n目录 '{directory_path}' 的完整结构:")
+    print("=" * 100)
+
+    # 获取所有数据
+    all_data = list_directory_contents_recursive(directory_path, max_depth)
+
+    if not all_data:
+        print("目录为空或无法访问")
+        return
+
+    # 创建DataFrame
+    df = pd.DataFrame(all_data)
+
+    # 按路径排序以便更好地显示层次结构
+    df = df.sort_values("完整路径")
+
+    # 显示结果
+    for _, row in df.iterrows():
+        indent = "  " * row["深度"]  # 根据深度缩进
+        if row["类型"] == "文件夹":
+            print(f"{indent}📁 {row['名称']}/")
+        else:
+            size_str = f"{row['大小(B)']} B" if row["大小(B)"] != "-" else "-"
+            print(f"{indent}📄 {row['名称']} ({size_str})")
+
+    # 统计信息
+    file_count = len([item for item in all_data if item["类型"] == "文件"])
+    dir_count = len([item for item in all_data if item["类型"] == "文件夹"])
+
+    print("=" * 100)
+    print(f"总计: {file_count} 个文件, {dir_count} 个文件夹")
+
+    return df
+
+def save_to_csv(df, filename="directory_structure.csv"):
+    """
+    将目录结构保存到CSV文件
+
+    Args:
+        df: 包含目录结构数据的DataFrame
+        filename: 输出的CSV文件名
+    """
+    try:
+        # 选择要保存的列
+        output_df = df[["名称", "类型", "大小(B)", "扩展名", "完整路径", "深度"]].copy()
+        output_df.to_csv(filename, index=False, encoding='utf-8-sig')
+        print(f"\n目录结构已保存到: {filename}")
+    except Exception as e:
+        print(f"保存CSV文件时出错: {e}")
+
+# 使用示例
+if __name__ == "__main__":
+    # 指定要扫描的目录
+    target_directory = "/home/hqu/PycharmProjects/3D-UNet/examples"
+
+    # 显示目录结构（可以设置max_depth限制递归深度）
+    print("正在扫描目录结构...")
+    result_df = display_directory_structure(target_directory, max_depth=3)
+
+    # 保存到CSV文件
+    if result_df is not None:
+        save_to_csv(result_df, "examples_directory_structure.csv")
+
+        # 可选：显示一些统计信息
+        print("\n扩展名统计:")
+        ext_stats = result_df[result_df["类型"] == "文件"]["扩展名"].value_counts()
+        for ext, count in ext_stats.items():
+            print(f"  {ext}: {count} 个文件")

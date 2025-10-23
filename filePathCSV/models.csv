@@ -1,0 +1,14 @@
+﻿名称,类型,大小(B),扩展名,完整路径,深度
+__init__.py,文件,0,.py,/home/hqu/PycharmProjects/SGN-master/models/__init__.py,0
+attention.py,文件,2155,.py,/home/hqu/PycharmProjects/SGN-master/models/attention.py,0
+decoder.py,文件,2657,.py,/home/hqu/PycharmProjects/SGN-master/models/decoder.py,0
+semantic_grouping_network.py,文件,14196,.py,/home/hqu/PycharmProjects/SGN-master/models/semantic_grouping_network.py,0
+train.py,文件,3300,.py,/home/hqu/PycharmProjects/SGN-master/models/train.py,0
+transformer,文件夹,-,-,/home/hqu/PycharmProjects/SGN-master/models/transformer,0
+Constants.py,文件,110,.py,/home/hqu/PycharmProjects/SGN-master/models/transformer/Constants.py,1
+Layers.py,文件,1896,.py,/home/hqu/PycharmProjects/SGN-master/models/transformer/Layers.py,1
+Models.py,文件,3162,.py,/home/hqu/PycharmProjects/SGN-master/models/transformer/Models.py,1
+Modules.py,文件,760,.py,/home/hqu/PycharmProjects/SGN-master/models/transformer/Modules.py,1
+SubLayers.py,文件,2949,.py,/home/hqu/PycharmProjects/SGN-master/models/transformer/SubLayers.py,1
+__init__.py,文件,1,.py,/home/hqu/PycharmProjects/SGN-master/models/transformer/__init__.py,1
+visual_encoder.py,文件,841,.py,/home/hqu/PycharmProjects/SGN-master/models/visual_encoder.py,0
