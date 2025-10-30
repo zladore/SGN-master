@@ -60,9 +60,9 @@ class ResNeXt(ResNet):
         self.fc = nn.Conv3d(1024 * ResNeXtBottleneck.expansion, 1, kernel_size=1)
 
     def forward(self, x):
-        print(x.shape)
+       # print(x.shape)
         x = self.conv1(x)
-        print(x.shape)
+       # print(x.shape)
         x = self.bn1(x)
         x = self.relu(x)
         if not self.no_max_pool:
