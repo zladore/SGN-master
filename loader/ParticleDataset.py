@@ -7,8 +7,9 @@ import json
 
 class ParticleDataset(Dataset):
     def __init__(self, filenames, transform=None,
-                 normalize=True, normalize_label=False,  # ← 标签不归一化
-                 input_mean=None, input_std=None):
+                 normalize_input=True, normalize_label=True,  # ← 标签不归一化
+                 input_mean=None, input_std=None,
+                 label_mean=None, label_std=None):
         """
         粒子数据加载器
         Args:
@@ -20,29 +21,36 @@ class ParticleDataset(Dataset):
         """
         self.filenames = filenames
         self.transform = transform
-        self.normalize = normalize
+        self.normalize_input = normalize_input
         self.normalize_label = normalize_label
 
         self.input_mean = np.array(input_mean) if input_mean is not None else None
         self.input_std = np.array(input_std) if input_std is not None else None
+        self.label_mean = np.array(label_mean) if label_mean is not None else None
+        self.label_std = np.array(label_std) if label_std is not None else None
 
-        # 仅当 normalize=True 且未提供统计参数时计算
-        if self.normalize and (self.input_mean is None or self.input_std is None):
+        # 仅当 normalize_input=True 且未提供统计参数时计算
+        if self.normalize_input and (self.input_mean is None or self.input_std is None):
             self.compute_normalization_parameters()
+            print("√启用input归一化")
+        elif self.normalize_label is None:
+            print("×禁用input归一化")
 
-        print(f"✅ Input normalization: {self.normalize}")
-        print(f"❌ Label normalization disabled")
-        if self.normalize and self.input_mean is not None:
-            print(f"Input mean={self.input_mean}, std={self.input_std}")
+        # 如果启用标签归一化且未提供参数，则计算标签统计
+        if self.normalize_label and (self.label_mean is None or self.label_std is None):
+            self.compute_label_normalization_parameters()
+            print("√启用标签归一化")
+        elif self.normalize_label is None:
+            print("×禁用标签归一化")
 
     def __len__(self):
         return len(self.filenames)
 
     # ------------------------------
-    # 计算输入归一化参数（仅在训练中使用）
+    # 计算输入归一化参数
     # ------------------------------
     def compute_normalization_parameters(self):
-        print("Computing normalization parameters for input...")
+        print("计算input的标准化参数...")
         input_sums = np.zeros(4)
         input_sq_sums = np.zeros(4)
         input_counts = np.zeros(4)
@@ -65,6 +73,44 @@ class ParticleDataset(Dataset):
         print("✅ Normalization parameters computed for input.")
 
     # ------------------------------
+    # 计算标签归一化参数
+    # ------------------------------
+    def compute_label_normalization_parameters(self):
+        """计算标签归一化参数"""
+        print("计算label的标准化参数...")
+
+        all_labels = []
+
+        for filename_info in self.filenames:
+            label_path = filename_info["label"]
+            if not os.path.exists(label_path):
+                continue
+
+            label_data = np.loadtxt(label_path)
+
+            # ===============================
+            # 与 __getitem__ 的处理逻辑保持一致
+            # ===============================
+            if label_data.ndim == 2 and label_data.shape[1] >= 2:
+                label_data = label_data[:, 1]
+            if len(label_data) == 22500:
+                label_data = label_data.reshape(250, 90).mean(axis=1)  # -> (250,)
+
+            all_labels.append(label_data)
+
+        # 堆叠成 (num_samples, 250)
+        all_labels = np.stack(all_labels, axis=0)
+
+        # 对每个列（位置点）求 mean/std
+        self.label_mean = np.mean(all_labels, axis=0)  # shape (250,)
+        self.label_std = np.std(all_labels, axis=0)
+        self.label_std = np.maximum(self.label_std, 1e-8)
+
+        print("✅ Label normalization parameters computed.")
+        print(f"Label mean shape: {self.label_mean.shape}")
+        print(f"Label std  shape: {self.label_std.shape}")
+
+    # ------------------------------
     # 数据加载与变换
     # ------------------------------
     def _reshape_input_data(self, input_data):
@@ -78,6 +124,16 @@ class ParticleDataset(Dataset):
     def _normalize_data(self, data, mean, std):
         return (data - mean) / std
 
+    def _denormalize_data(self, data, mean, std):
+        """反归一化：data * std + mean"""
+        return data * std + mean
+
+    def denormalize_label(self, label_data):
+        """反归一化标签数据"""
+        if self.normalize_label and self.label_mean is not None and self.label_std is not None:
+            label_data = self._denormalize_data(label_data, self.label_mean, self.label_std)
+        return label_data
+
     def __getitem__(self, idx):
         info = self.filenames[idx]
         input_path = info["image"]
@@ -86,10 +142,6 @@ class ParticleDataset(Dataset):
         # --- 加载输入 ---
         input_data = np.loadtxt(input_path)
         input_data = self._reshape_input_data(input_data)
-
-        if self.normalize and self.input_mean is not None and self.input_std is not None:
-            for c in range(4):
-                input_data[c] = self._normalize_data(input_data[c], self.input_mean[c], self.input_std[c])
 
         # --- 加载标签 ---
         output_data = np.loadtxt(label_path)
@@ -102,7 +154,14 @@ class ParticleDataset(Dataset):
         if len(output_data) == 22500:
             output_data = output_data.reshape(250, 90).mean(axis=1)
 
-        # ⚠️ 不对标签进行归一化
+        # --- 输入归一化 ---
+        if self.normalize_input and self.input_mean is not None and self.input_std is not None:
+            for c in range(4):
+                input_data[c] = self._normalize_data(input_data[c], self.input_mean[c], self.input_std[c])
+        # --- 标签归一化 ---
+        if self.normalize_label and self.label_mean is not None and self.label_std is not None:
+            output_data = self._normalize_data(output_data, self.label_mean, self.label_std)
+
         input_tensor = torch.from_numpy(input_data).float()
         output_tensor = torch.from_numpy(output_data).float()
 
@@ -116,10 +175,12 @@ class ParticleDataset(Dataset):
     # 工具函数
     # ------------------------------
     def get_normalization_params(self):
-        """仅返回输入归一化参数"""
+        """返回输入和标签归一化参数"""
         return {
             'input_mean': self.input_mean,
-            'input_std': self.input_std
+            'input_std': self.input_std,
+            'label_mean': self.label_mean,
+            'label_std': self.label_std
         }
 
     @classmethod
@@ -135,7 +196,9 @@ class ParticleDataset(Dataset):
         """保存输入归一化参数"""
         params = {
             'input_mean': self.input_mean.tolist() if self.input_mean is not None else None,
-            'input_std': self.input_std.tolist() if self.input_std is not None else None
+            'input_std': self.input_std.tolist() if self.input_std is not None else None,
+            'label_mean': self.label_mean.tolist() if self.label_mean is not None else None,
+            'label_std': self.label_std.tolist() if self.label_std is not None else None
         }
         with open(path, "w") as f:
             json.dump(params, f, indent=4)

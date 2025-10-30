@@ -7,9 +7,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
-# 导入你已修改好的 ParticleDataset
 from loader.ParticleDataset import ParticleDataset
-
 
 class ParticleDataLoader:
     """粒子数据加载器 - 管理训练、验证和测试数据加载器"""
@@ -81,29 +79,29 @@ class ParticleDataLoader:
         training_batch_size = training_config.get("batch_size", batch_size)
         val_batch_size = training_config.get("validation_batch_size", batch_size)
 
-        # --- 构建训练集 (只归一化输入) ---
+        # --- 构建训练集 ---
         self.train_dataset = ParticleDataset(
             filenames=train_files,
-            # normalize_input=True,  # ✅ 只归一化 input
-            # normalize_label=False  # ❌ 不归一化 label
+            normalize_input=True,
+            normalize_label=True,
         )
 
-        # 获取训练集的 input 归一化参数
+        # 获取训练集的 input 和 label归一化参数
         norm_params = self.train_dataset.get_normalization_params()
 
-        # --- 验证集 (共享训练集的 input 归一化参数) ---
+        # --- 验证集 (共享训练集的 input 和 label 归一化参数) ---
         self.val_dataset = ParticleDataset(
             filenames=val_files,
-            # normalize_input=True,
-            # normalize_label=False,
+            normalize_input=True,
+            normalize_label=True,
             **norm_params
         )
 
-        # --- 测试集 (共享训练集的 input 归一化参数) ---
+        # --- 测试集 (共享训练集的 input 和 label 归一化参数) ---
         self.test_dataset = ParticleDataset(
             filenames=test_files,
-            # normalize_input=True,
-            # normalize_label=False,
+            normalize_input=True,
+            normalize_label=True,
             **norm_params
         )
 
@@ -141,12 +139,16 @@ class ParticleDataLoader:
         print(f"  测试集: {len(self.test_dataset)} 个样本, 批次大小: {val_batch_size}")
 
         # --- 保存 input 的归一化参数 ---
-        norm_params_path = os.path.join(dataset_config.get("input_dir", "."), 'normalization_params.json')
+        # 使用相对路径：从当前文件位置到 data/norm_params
+        norm_params_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'norm_params')
+        os.makedirs(norm_params_dir, exist_ok=True)
+
+        # 保存到 data/norm_params/ 目录下
+        norm_params_path = os.path.join(norm_params_dir, 'normalization_params.json')
         self.train_dataset.save_normalization_params(norm_params_path)
 
     def collate_fn(self, batch):
         """自定义批次处理函数"""
-        # ✅ Dataset 已改为返回 images / labels / filenames
         valid_batch = [item for item in batch if not torch.isnan(item["image"]).any()]
 
         if len(valid_batch) == 0:
@@ -185,17 +187,62 @@ def load_config(config_path):
 
 
 if __name__ == "__main__":
-    # 测试代码
+    # ===============================
+    # 1️⃣ 加载配置文件
+    # ===============================
     config_path = "/home/hqu/PycharmProjects/SGN-master/data/particle_config/particle_config.json"
     config = load_config(config_path)
 
+    # ===============================
+    # 2️⃣ 构建 DataLoader
+    # ===============================
     loader = ParticleDataLoader(config)
     train_loader, val_loader, test_loader = loader.get_loaders()
+    train_dataset, _, _ = loader.get_datasets()
 
-    # 测试一个批次
+    # ===============================
+    # 3️⃣ 打印归一化参数
+    # ===============================
+    norm_params = train_dataset.get_normalization_params()
+    print("\n📊 ==== 归一化参数检查 ====")
+    print("Input mean:", np.round(norm_params["input_mean"], 5))
+    print("Input std :", np.round(norm_params["input_std"], 5))
+    print("Label mean shape:", norm_params["label_mean"].shape)
+    print("Label std  shape:", norm_params["label_std"].shape)
+
+    # ===============================
+    # 4️⃣ 测试一个批次
+    # ===============================
     for batch_idx, batch in enumerate(train_loader):
-        print(f"批次 {batch_idx}:")
+        print(f"\n📦 批次 {batch_idx}:")
         print(f"  输入形状: {batch['image'].shape}")   # (batch_size, 4, 3, 250, 30)
         print(f"  标签形状: {batch['label'].shape}")   # (batch_size, 250)
-        print(f"  文件名: {batch['filename'][:2]}...")  # 显示前两个文件名
-        break  # 只测试第一个批次
+        print(f"  文件名样例: {batch['filename'][:2]}")
+
+        # --- 检查归一化效果 ---
+        inputs = batch["image"].numpy()
+        labels = batch["label"].numpy()
+
+        print(f"  🔍 输入均值(应≈0): {inputs.mean():.4f}")
+        print(f"  🔍 输入标准差(应≈1): {inputs.std():.4f}")
+        print(f"  🔍 标签均值(应≈0): {labels.mean():.4f}")
+        print(f"  🔍 标签标准差(应≈1): {labels.std():.4f}")
+
+        # --- 检查反归一化效果 ---
+        denorm_labels = train_dataset.denormalize_label(labels)
+
+        print(f"  🔄 反归一化后标签均值: {denorm_labels.mean():.4f}")
+        print(f"  🔄 反归一化后标签标准差: {denorm_labels.std():.4f}")
+
+        # --- 改进验证逻辑 ---
+        global_mean = norm_params["label_mean"].mean()
+        mean_diff = abs(denorm_labels.mean() - global_mean)
+        print(f"  📏 均值差距: {mean_diff:.2f}")
+
+        if mean_diff < 0.5 * norm_params["label_std"].mean():
+            print("✅ 标签反归一化分布合理")
+        else:
+            print("⚠️ 当前批次分布偏离整体（但不一定是错误）")
+
+        break  # 只取第一个批次
+
