@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import os
 import sys
 import json
@@ -8,194 +9,231 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+import datetime
 
 from models.model_builder import build_model
 from loader.ParticleDataset import ParticleDataset
 
-# -----------------------
+
+# ===============================================================
+# 🔧 基本配置
+# ===============================================================
 CONFIG_PATH = "data/particle_config/particle_config.json"
 CHECKPOINT_DIR = "checkpoints"
-RESULTS_DIR = "results"
-os.makedirs(RESULTS_DIR, exist_ok=True)
+RESULTS_BASE = "results"
+os.makedirs(RESULTS_BASE, exist_ok=True)
 
-# 实时打印
+# 实时输出
 print = lambda *args, **kwargs: (__import__("builtins").print(*args, **kwargs), sys.stdout.flush())
 
 
-def resolve_paths(base_input_dir, base_output_dir, file_list):
-    resolved = []
-    for item in file_list:
-        img = item["image"]
-        lab = item["label"]
-        if not os.path.isabs(img):
-            img = os.path.join(base_input_dir, os.path.basename(img))
-        if not os.path.isabs(lab):
-            lab = os.path.join(base_output_dir, os.path.basename(lab))
-        resolved.append({"image": img, "label": lab})
-    return resolved
-
-
+# ===============================================================
+# 🧠 自动加载最新 checkpoint
+# ===============================================================
 def load_latest_checkpoint(checkpoint_dir):
     ckpts = [f for f in os.listdir(checkpoint_dir) if f.endswith(".pth")]
     if not ckpts:
-        raise FileNotFoundError(f"未在 {checkpoint_dir} 中找到权重文件")
+        raise FileNotFoundError(f"未在 {checkpoint_dir} 中找到模型权重文件 (.pth)")
     ckpts = sorted(ckpts, key=lambda x: int(''.join(filter(str.isdigit, x)) or 0))
-    return os.path.join(checkpoint_dir, ckpts[-1])
+    latest = os.path.join(checkpoint_dir, ckpts[-1])
+    print(f"✅ 已加载最新权重: {latest}")
+    return latest
 
 
+# ===============================================================
+# 🧮 主推理函数
+# ===============================================================
 def main():
-    print("加载配置...")
+    # 1️⃣ 读取配置
+    print("加载配置中...")
     with open(CONFIG_PATH, "r") as f:
         config = json.load(f)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"使用设备: {device}")
-
-    # load normalization params for input
-    norm_path = os.path.join(config["dataset"]["input_dir"], "normalization_params.json")
+    # 2️⃣ 提取归一化参数（从 normalization_params.json）
+    norm_path = "data/norm_params/normalization_params.json"
     if not os.path.exists(norm_path):
-        raise FileNotFoundError(f"找不到归一化参数文件: {norm_path}")
-    norm_params = ParticleDataset.load_normalization_params(norm_path)
-    print(f"已加载归一化参数: {norm_path}")
+        raise FileNotFoundError(f"❌ 未找到归一化参数文件: {norm_path}")
 
-    # prepare test files
+    with open(norm_path, "r") as f:
+        norm_params = json.load(f)
+
+    # 转成 numpy 数组
+    input_mean = np.array(norm_params.get("input_mean", [0]))
+    input_std = np.array(norm_params.get("input_std", [1]))
+    label_mean = np.array(norm_params.get("label_mean", [0]))
+    label_std = np.array(norm_params.get("label_std", [1]))
+
+    # ✅ 检查形状（input 4通道）
+    if input_mean.size != 4 or input_std.size != 4:
+        raise ValueError(f"❌ input_mean/std 形状错误: mean={input_mean.shape}, std={input_std.shape}，应为长度4")
+
+    print(f"✅ 已加载归一化参数 from {norm_path}")
+    print(f"   input_mean: {input_mean}")
+    print(f"   input_std : {input_std}")
+    print(f"   label_mean shape: {label_mean.shape}, label_std shape: {label_std.shape}")
+
+    # 3️⃣ 设置设备
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"🖥️ 使用设备: {device}")
+
+    # 4️⃣ 加载测试数据
+    dataset_cfg = config.get("dataset", {})
     test_files_cfg = config.get("test_filenames", [])
-    test_files = resolve_paths(config["dataset"]["input_dir"], config["dataset"]["output_dir"], test_files_cfg)
-    if len(test_files) == 0:
-        raise ValueError("配置文件中 test_filenames 为空")
+    if len(test_files_cfg) == 0:
+        raise ValueError("⚠️ 配置文件中 test_filenames 为空")
 
     test_dataset = ParticleDataset(
-        filenames=test_files,
+        filenames=test_files_cfg,
         transform=None,
-        normalize=True,
-        normalize_label=False,
-        input_mean=norm_params.get("input_mean"),
-        input_std=norm_params.get("input_std"),
+        normalize_input=True,
+        normalize_label=True,
+        input_mean=input_mean,
+        input_std=input_std,
+        label_mean=label_mean,
+        label_std=label_std
     )
 
     from torch.utils.data import DataLoader
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=0)
-    print(f"测试集样本数: {len(test_dataset)}")
+    print(f"✅ 测试样本数: {len(test_dataset)}")
 
-    # model
-    model_cfg = config["model"]
-    model = build_model(model_cfg).to(device)
+    # 5️⃣ 构建模型并加载权重
+    model = build_model(config["model"]).to(device)
     ckpt_path = load_latest_checkpoint(CHECKPOINT_DIR)
     model.load_state_dict(torch.load(ckpt_path, map_location=device))
     model.eval()
-    print(f"已加载权重: {ckpt_path}")
 
-    criterion = nn.MSELoss()
+    criterion = nn.SmoothL1Loss()
     total_loss = 0.0
+    preds_list, labels_list, filenames = [], [], []
 
-    preds_list = []
-    labels_list = []
-    filenames = []
+    # 6️⃣ 输出路径
+    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    exp_dir = os.path.join(RESULTS_BASE, f"exp_{timestamp}_test")
+    os.makedirs(exp_dir, exist_ok=True)
 
-    print("开始测试...")
+    # 7️⃣ 开始推理
+    print("🚀 开始推理...")
     with torch.no_grad():
-        for batch_idx, batch in enumerate(tqdm(test_loader, desc="测试中", dynamic_ncols=True, leave=True)):
-            # keys are: "image", "label", "filename"
+        for batch_idx, batch in enumerate(tqdm(test_loader, desc="Testing", dynamic_ncols=True)):
             x = batch["image"].to(device)
             y = batch["label"].to(device)
             fname = batch["filename"][0]
 
             preds = model(x)
-            # flatten to (B, out_dim)
-            if preds.dim() > 2:
-                preds = preds.view(preds.size(0), -1)
-            if y.dim() > 2:
-                y = y.view(y.size(0), -1)
-            if preds.dim() == 1:
-                preds = preds.unsqueeze(0)
-            if y.dim() == 1:
-                y = y.unsqueeze(0)
+            preds = preds.view(preds.size(0), -1)
+            y = y.view(y.size(0), -1)
 
-            # compute loss per batch
             loss = criterion(preds, y)
             total_loss += loss.item()
 
-            preds_np = preds.detach().cpu().numpy().squeeze()
-            labels_np = y.detach().cpu().numpy().squeeze()
-            preds_np = np.asarray(preds_np).reshape(-1)
-            labels_np = np.asarray(labels_np).reshape(-1)
+            preds_np = preds.cpu().numpy().squeeze()
+            labels_np = y.cpu().numpy().squeeze()
 
-            preds_list.append(preds_np.copy())
-            labels_list.append(labels_np.copy())
+            # 反归一化
+            preds_np = preds_np * label_std + label_mean
+            labels_np = labels_np * label_std + label_mean
+
+            preds_list.append(preds_np)
+            labels_list.append(labels_np)
             filenames.append(fname)
 
-            # debug print for first 3 samples
+            # 前几个样本打印
             if batch_idx < 3:
-                nprint = min(10, preds_np.size, labels_np.size)
-                print(f"\n样本 {fname} 前{nprint}点 (pred | label):")
+                nprint = min(10, len(preds_np))
+                print(f"\n样本 {fname} (前{nprint}个点, 已反归一化):")
                 for i in range(nprint):
-                    print(f"  pred[{i:03d}]={preds_np[i]:.6f} | label[{i:03d}]={labels_np[i]:.6f}")
+                    print(f"  pred[{i:03d}]={preds_np[i]:.4f} | label[{i:03d}]={labels_np[i]:.4f}")
 
-    # stack into arrays (N, D)
+    # 8️⃣ 结果统计
     preds_all = np.stack(preds_list, axis=0)
     labels_all = np.stack(labels_list, axis=0)
-
-    print(f"\nDEBUG: preds_all.shape = {preds_all.shape}, labels_all.shape = {labels_all.shape}, n_files = {len(filenames)}")
-    print("DEBUG: first sample pred (first 10):", preds_all[0][:10].tolist())
-    print("DEBUG: first sample label (first 10):", labels_all[0][:10].tolist())
-
     avg_loss = total_loss / len(test_loader)
-    print(f"\n测试完成 | 平均Loss={avg_loss:.6f} | 样本数={len(test_dataset)}")
 
-    # save numpy for later inspection
-    np.save(os.path.join(RESULTS_DIR, "preds_all.npy"), preds_all)
-    np.save(os.path.join(RESULTS_DIR, "labels_all.npy"), labels_all)
-    print("已保存 numpy arrays: preds_all.npy, labels_all.npy")
+    # 计算真实误差指标
+    mse_real = np.mean((preds_all - labels_all) ** 2)
+    mae_real = np.mean(np.abs(preds_all - labels_all))
+    ss_res = np.sum((labels_all - preds_all) ** 2)
+    ss_tot = np.sum((labels_all - np.mean(labels_all)) ** 2)
+    r2_score = 1 - ss_res / ss_tot
 
-    # --------------------------
-    # Save CSV with interleaved columns:
-    # filename, pred_0, label_0, pred_1, label_1, ...
-    # --------------------------
-    out_csv = os.path.join(RESULTS_DIR, "test_results_full.csv")
+    print(f"\n✅ 推理完成！")
+    print(f"📊 平均 SmoothL1Loss(归一化域) = {avg_loss:.6f}")
+    print(f"📏 真实误差: MSE={mse_real:.3f} | MAE={mae_real:.3f} | R²={r2_score:.4f}")
 
+    # 9️⃣ 保存结果
+    np.save(os.path.join(exp_dir, "preds_all.npy"), preds_all)
+    np.save(os.path.join(exp_dir, "labels_all.npy"), labels_all)
+
+    # 9️⃣ 保存结果
+    preds_all = np.stack(preds_list, axis=0)
+    labels_all = np.stack(labels_list, axis=0)
+    avg_loss = total_loss / len(test_loader)
+
+    # 计算真实误差指标
+    mse_real = np.mean((preds_all - labels_all) ** 2)
+    mae_real = np.mean(np.abs(preds_all - labels_all))
+    ss_res = np.sum((labels_all - preds_all) ** 2)
+    ss_tot = np.sum((labels_all - np.mean(labels_all)) ** 2)
+    r2_score = 1 - ss_res / ss_tot
+
+    print(f"\n✅ 推理完成！")
+    print(f"📊 平均 SmoothL1Loss(归一化域) = {avg_loss:.6f}")
+    print(f"📏 真实误差: MSE={mse_real:.3f} | MAE={mae_real:.3f} | R²={r2_score:.4f}")
+
+    # =========================================================
+    # ✅ 生成交错列格式的 CSV: filename, pred_0, label_0, pred_1, label_1, ...
+    # =========================================================
     N, D = preds_all.shape
-    # build columns header
     cols = ["filename"]
-    for j in range(D):
-        cols.append(f"pred_{j}")
-        cols.append(f"label_{j}")
+    for i in range(D):
+        cols += [f"pred_{i}", f"label_{i}"]
 
-    # create rows
     rows = []
     for i in range(N):
         row = [filenames[i]]
         for j in range(D):
-            # ensure float scalar values
-            row.append(float(preds_all[i, j]))
-            row.append(float(labels_all[i, j]))
+            row += [preds_all[i, j], labels_all[i, j]]
         rows.append(row)
 
-    # create DataFrame with specified columns order
     df = pd.DataFrame(rows, columns=cols)
+    csv_path = os.path.join(exp_dir, "test_results.csv")
+    df.to_csv(csv_path, index=False)
+    print(f"✅ 已保存交错格式 CSV -> {csv_path}")
 
-    # preview first row
-    if not df.empty:
-        preview = df.iloc[0:1]
-        print("\nCSV first row preview (interleaved):")
-        # print up to first 20 columns for readability
-        print(preview.iloc[0, :min(1 + 2*10, len(cols))].to_dict())
 
-    # save to csv
-    df.to_csv(out_csv, index=False)
-    print(f"CSV 已保存 -> {out_csv}")
+    # 误差摘要
+    metrics_path = os.path.join(exp_dir, "metrics_summary.txt")
+    with open(metrics_path, "w") as f:
+        f.write(f"Average SmoothL1Loss (normalized): {avg_loss:.6f}\n")
+        f.write(f"MSE (real): {mse_real:.6f}\n")
+        f.write(f"MAE (real): {mae_real:.6f}\n")
+        f.write(f"R² (real): {r2_score:.6f}\n")
+    print(f"✅ 误差摘要保存至: {metrics_path}")
 
-    # plot flattened comparison
+    # 10️⃣ 绘图保存
     plt.figure(figsize=(14, 5))
     plt.plot(preds_all.flatten(), label="Prediction", linewidth=0.8)
     plt.plot(labels_all.flatten(), label="Ground Truth", linewidth=0.8)
-    plt.title(f"Prediction vs Ground Truth | MSE={avg_loss:.6f}")
+    plt.title(f"Prediction vs Ground Truth (MSE={mse_real:.3f}, MAE={mae_real:.3f}, R²={r2_score:.3f})")
     plt.legend()
-    plt.grid(True, linestyle="--", alpha=0.3)
+    plt.grid(True, linestyle="--", alpha=0.4)
     plt.tight_layout()
-    out_fig = os.path.join(RESULTS_DIR, "test_predictions_flatten.png")
-    plt.savefig(out_fig, dpi=300)
+    plt.savefig(os.path.join(exp_dir, "test_predictions_curve.png"), dpi=300)
     plt.close()
-    print(f"图像已保存 -> {out_fig}")
+
+    # 散点对比图
+    plt.figure(figsize=(6, 6))
+    plt.scatter(labels_all.flatten(), preds_all.flatten(), s=5, alpha=0.5)
+    plt.xlabel("True Values")
+    plt.ylabel("Predictions")
+    plt.title("Predicted vs True (after denormalization)")
+    plt.grid(True, linestyle="--", alpha=0.4)
+    plt.tight_layout()
+    plt.savefig(os.path.join(exp_dir, "scatter_pred_vs_true.png"), dpi=300)
+    plt.close()
+
+    print(f"🎨 所有图像与结果已保存到: {exp_dir}")
 
 
 if __name__ == "__main__":
