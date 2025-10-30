@@ -45,20 +45,39 @@ class ResNeXt(ResNet):
                  no_max_pool=False,
                  shortcut_type='B',
                  cardinality=32,
-                 n_classes=250,
-                 ):
+                 n_classes=250):
         block = partialclass(block, cardinality=cardinality)
         super().__init__(block, layers, block_inplanes,
                          n_input_channels, conv1_t_size,
                          conv1_t_stride, no_max_pool,
                          shortcut_type, n_classes=n_classes)
 
-        # 最后一层线性层（回归任务不加激活）
-        self.fc = nn.Linear(cardinality * 32 * block.expansion, n_classes)
+        # 🔧 保留 y 方向，压缩其他方向
+        self.avgpool = nn.AdaptiveAvgPool3d((1, 250, 1))
+        # 最后得到 [B, C, 1, 250, 1]
+
+        # 🔧 用 1x1 卷积映射到 1 通道（即每个 y 上一个预测值）
+        self.fc = nn.Conv3d(1024 * ResNeXtBottleneck.expansion, 1, kernel_size=1)
 
     def forward(self, x):
-        x = super().forward(x)
+        print(x.shape)
+        x = self.conv1(x)
+        print(x.shape)
+        x = self.bn1(x)
+        x = self.relu(x)
+        if not self.no_max_pool:
+            x = self.maxpool(x)
+
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
+        x = self.layer4(x)
+
+        x = self.avgpool(x)  # -> [B, C, 1, 250, 1]
+        x = self.fc(x)       # -> [B, 1, 1, 250, 1]
+        x = x.squeeze(1).squeeze(1).squeeze(-1)  # -> [B, 250]
         return x
+
 
 def generate_model(model_depth, **kwargs):
     assert model_depth in [50, 101, 152, 200]
