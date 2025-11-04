@@ -1,0 +1,2299 @@
+{
+    "model": {
+        "name": "3DResNeXt101",
+        "in_channels": 4,
+        "out_features": 250
+    },
+    "optimizer": {
+        "name": "Adam",
+        "lr": 0.0005
+    },
+    "loss": {
+        "name": "SmoothL1Loss"
+    },
+    "scheduler": {
+        "name": "CosineAnnealingWarmup",
+        "warmup_epochs": 10,
+        "max_epochs": 200,
+        "min_lr": 1e-6
+    },
+    "dataset": {
+        "name": "ParticleDataset",
+        "input_dir": "/home/hqu/PycharmProjects/SGN-master/data/input",
+        "output_dir": "/home/hqu/PycharmProjects/SGN-master/data/output",
+        "data_loader": {
+            "batch_size": 1,
+            "shuffle": true,
+            "num_workers": 0
+        }
+    },
+        "training": {
+        "batch_size": 4,
+        "validation_batch_size": 4,
+        "amp": false,
+        "early_stopping_patience": 30,
+        "n_epochs": 200,
+        "save_best": true
+    },
+    "training_filenames": [
+        {
+            "image": "data/input/insert-2195000.dat",
+            "label": "data/output/insert-2195000.dat"
+        },
+        {
+            "image": "data/input/insert-1340000.dat",
+            "label": "data/output/insert-1340000.dat"
+        },
+        {
+            "image": "data/input/insert-745000.dat",
+            "label": "data/output/insert-745000.dat"
+        },
+        {
+            "image": "data/input/insert-1755000.dat",
+            "label": "data/output/insert-1755000.dat"
+        },
+        {
+            "image": "data/input/insert-1750000.dat",
+            "label": "data/output/insert-1750000.dat"
+        },
+        {
+            "image": "data/input/insert-1095000.dat",
+            "label": "data/output/insert-1095000.dat"
+        },
+        {
+            "image": "data/input/insert-365000.dat",
+            "label": "data/output/insert-365000.dat"
+        },
+        {
+            "image": "data/input/insert-1875000.dat",
+            "label": "data/output/insert-1875000.dat"
+        },
+        {
+            "image": "data/input/insert-2340000.dat",
+            "label": "data/output/insert-2340000.dat"
+        },
+        {
+            "image": "data/input/insert-2820000.dat",
+            "label": "data/output/insert-2820000.dat"
+        },
+        {
+            "image": "data/input/insert-665000.dat",
+            "label": "data/output/insert-665000.dat"
+        },
+        {
+            "image": "data/input/insert-15000.dat",
+            "label": "data/output/insert-15000.dat"
+        },
+        {
+            "image": "data/input/insert-2660000.dat",
+            "label": "data/output/insert-2660000.dat"
+        },
+        {
+            "image": "data/input/insert-1810000.dat",
+            "label": "data/output/insert-1810000.dat"
+        },
+        {
+            "image": "data/input/insert-1600000.dat",
+            "label": "data/output/insert-1600000.dat"
+        },
+        {
+            "image": "data/input/insert-2555000.dat",
+            "label": "data/output/insert-2555000.dat"
+        },
+        {
+            "image": "data/input/insert-275000.dat",
+            "label": "data/output/insert-275000.dat"
+        },
+        {
+            "image": "data/input/insert-870000.dat",
+            "label": "data/output/insert-870000.dat"
+        },
+        {
+            "image": "data/input/insert-2185000.dat",
+            "label": "data/output/insert-2185000.dat"
+        },
+        {
+            "image": "data/input/insert-1050000.dat",
+            "label": "data/output/insert-1050000.dat"
+        },
+        {
+            "image": "data/input/insert-200000.dat",
+            "label": "data/output/insert-200000.dat"
+        },
+        {
+            "image": "data/input/insert-2215000.dat",
+            "label": "data/output/insert-2215000.dat"
+        },
+        {
+            "image": "data/input/insert-1250000.dat",
+            "label": "data/output/insert-1250000.dat"
+        },
+        {
+            "image": "data/input/insert-925000.dat",
+            "label": "data/output/insert-925000.dat"
+        },
+        {
+            "image": "data/input/insert-1160000.dat",
+            "label": "data/output/insert-1160000.dat"
+        },
+        {
+            "image": "data/input/insert-2170000.dat",
+            "label": "data/output/insert-2170000.dat"
+        },
+        {
+            "image": "data/input/insert-910000.dat",
+            "label": "data/output/insert-910000.dat"
+        },
+        {
+            "image": "data/input/insert-1200000.dat",
+            "label": "data/output/insert-1200000.dat"
+        },
+        {
+            "image": "data/input/insert-915000.dat",
+            "label": "data/output/insert-915000.dat"
+        },
+        {
+            "image": "data/input/insert-120000.dat",
+            "label": "data/output/insert-120000.dat"
+        },
+        {
+            "image": "data/input/insert-805000.dat",
+            "label": "data/output/insert-805000.dat"
+        },
+        {
+            "image": "data/input/insert-1815000.dat",
+            "label": "data/output/insert-1815000.dat"
+        },
+        {
+            "image": "data/input/insert-1240000.dat",
+            "label": "data/output/insert-1240000.dat"
+        },
+        {
+            "image": "data/input/insert-1265000.dat",
+            "label": "data/output/insert-1265000.dat"
+        },
+        {
+            "image": "data/input/insert-1065000.dat",
+            "label": "data/output/insert-1065000.dat"
+        },
+        {
+            "image": "data/input/insert-280000.dat",
+            "label": "data/output/insert-280000.dat"
+        },
+        {
+            "image": "data/input/insert-2165000.dat",
+            "label": "data/output/insert-2165000.dat"
+        },
+        {
+            "image": "data/input/insert-2010000.dat",
+            "label": "data/output/insert-2010000.dat"
+        },
+        {
+            "image": "data/input/insert-1745000.dat",
+            "label": "data/output/insert-1745000.dat"
+        },
+        {
+            "image": "data/input/insert-2055000.dat",
+            "label": "data/output/insert-2055000.dat"
+        },
+        {
+            "image": "data/input/insert-2670000.dat",
+            "label": "data/output/insert-2670000.dat"
+        },
+        {
+            "image": "data/input/insert-335000.dat",
+            "label": "data/output/insert-335000.dat"
+        },
+        {
+            "image": "data/input/insert-680000.dat",
+            "label": "data/output/insert-680000.dat"
+        },
+        {
+            "image": "data/input/insert-310000.dat",
+            "label": "data/output/insert-310000.dat"
+        },
+        {
+            "image": "data/input/insert-2335000.dat",
+            "label": "data/output/insert-2335000.dat"
+        },
+        {
+            "image": "data/input/insert-1380000.dat",
+            "label": "data/output/insert-1380000.dat"
+        },
+        {
+            "image": "data/input/insert-2385000.dat",
+            "label": "data/output/insert-2385000.dat"
+        },
+        {
+            "image": "data/input/insert-1640000.dat",
+            "label": "data/output/insert-1640000.dat"
+        },
+        {
+            "image": "data/input/insert-2475000.dat",
+            "label": "data/output/insert-2475000.dat"
+        },
+        {
+            "image": "data/input/insert-960000.dat",
+            "label": "data/output/insert-960000.dat"
+        },
+        {
+            "image": "data/input/insert-1900000.dat",
+            "label": "data/output/insert-1900000.dat"
+        },
+        {
+            "image": "data/input/insert-970000.dat",
+            "label": "data/output/insert-970000.dat"
+        },
+        {
+            "image": "data/input/insert-1605000.dat",
+            "label": "data/output/insert-1605000.dat"
+        },
+        {
+            "image": "data/input/insert-1270000.dat",
+            "label": "data/output/insert-1270000.dat"
+        },
+        {
+            "image": "data/input/insert-2800000.dat",
+            "label": "data/output/insert-2800000.dat"
+        },
+        {
+            "image": "data/input/insert-675000.dat",
+            "label": "data/output/insert-675000.dat"
+        },
+        {
+            "image": "data/input/insert-2805000.dat",
+            "label": "data/output/insert-2805000.dat"
+        },
+        {
+            "image": "data/input/insert-2480000.dat",
+            "label": "data/output/insert-2480000.dat"
+        },
+        {
+            "image": "data/input/insert-300000.dat",
+            "label": "data/output/insert-300000.dat"
+        },
+        {
+            "image": "data/input/insert-1695000.dat",
+            "label": "data/output/insert-1695000.dat"
+        },
+        {
+            "image": "data/input/insert-2330000.dat",
+            "label": "data/output/insert-2330000.dat"
+        },
+        {
+            "image": "data/input/insert-2420000.dat",
+            "label": "data/output/insert-2420000.dat"
+        },
+        {
+            "image": "data/input/insert-2790000.dat",
+            "label": "data/output/insert-2790000.dat"
+        },
+        {
+            "image": "data/input/insert-2655000.dat",
+            "label": "data/output/insert-2655000.dat"
+        },
+        {
+            "image": "data/input/insert-2550000.dat",
+            "label": "data/output/insert-2550000.dat"
+        },
+        {
+            "image": "data/input/insert-1280000.dat",
+            "label": "data/output/insert-1280000.dat"
+        },
+        {
+            "image": "data/input/insert-205000.dat",
+            "label": "data/output/insert-205000.dat"
+        },
+        {
+            "image": "data/input/insert-2535000.dat",
+            "label": "data/output/insert-2535000.dat"
+        },
+        {
+            "image": "data/input/insert-1770000.dat",
+            "label": "data/output/insert-1770000.dat"
+        },
+        {
+            "image": "data/input/insert-1005000.dat",
+            "label": "data/output/insert-1005000.dat"
+        },
+        {
+            "image": "data/input/insert-2345000.dat",
+            "label": "data/output/insert-2345000.dat"
+        },
+        {
+            "image": "data/input/insert-2045000.dat",
+            "label": "data/output/insert-2045000.dat"
+        },
+        {
+            "image": "data/input/insert-2595000.dat",
+            "label": "data/output/insert-2595000.dat"
+        },
+        {
+            "image": "data/input/insert-495000.dat",
+            "label": "data/output/insert-495000.dat"
+        },
+        {
+            "image": "data/input/insert-1395000.dat",
+            "label": "data/output/insert-1395000.dat"
+        },
+        {
+            "image": "data/input/insert-1785000.dat",
+            "label": "data/output/insert-1785000.dat"
+        },
+        {
+            "image": "data/input/insert-190000.dat",
+            "label": "data/output/insert-190000.dat"
+        },
+        {
+            "image": "data/input/insert-935000.dat",
+            "label": "data/output/insert-935000.dat"
+        },
+        {
+            "image": "data/input/insert-2365000.dat",
+            "label": "data/output/insert-2365000.dat"
+        },
+        {
+            "image": "data/input/insert-1920000.dat",
+            "label": "data/output/insert-1920000.dat"
+        },
+        {
+            "image": "data/input/insert-2460000.dat",
+            "label": "data/output/insert-2460000.dat"
+        },
+        {
+            "image": "data/input/insert-545000.dat",
+            "label": "data/output/insert-545000.dat"
+        },
+        {
+            "image": "data/input/insert-1475000.dat",
+            "label": "data/output/insert-1475000.dat"
+        },
+        {
+            "image": "data/input/insert-1885000.dat",
+            "label": "data/output/insert-1885000.dat"
+        },
+        {
+            "image": "data/input/insert-2250000.dat",
+            "label": "data/output/insert-2250000.dat"
+        },
+        {
+            "image": "data/input/insert-2780000.dat",
+            "label": "data/output/insert-2780000.dat"
+        },
+        {
+            "image": "data/input/insert-1710000.dat",
+            "label": "data/output/insert-1710000.dat"
+        },
+        {
+            "image": "data/input/insert-1410000.dat",
+            "label": "data/output/insert-1410000.dat"
+        },
+        {
+            "image": "data/input/insert-1880000.dat",
+            "label": "data/output/insert-1880000.dat"
+        },
+        {
+            "image": "data/input/insert-155000.dat",
+            "label": "data/output/insert-155000.dat"
+        },
+        {
+            "image": "data/input/insert-695000.dat",
+            "label": "data/output/insert-695000.dat"
+        },
+        {
+            "image": "data/input/insert-2405000.dat",
+            "label": "data/output/insert-2405000.dat"
+        },
+        {
+            "image": "data/input/insert-1485000.dat",
+            "label": "data/output/insert-1485000.dat"
+        },
+        {
+            "image": "data/input/insert-2750000.dat",
+            "label": "data/output/insert-2750000.dat"
+        },
+        {
+            "image": "data/input/insert-565000.dat",
+            "label": "data/output/insert-565000.dat"
+        },
+        {
+            "image": "data/input/insert-1155000.dat",
+            "label": "data/output/insert-1155000.dat"
+        },
+        {
+            "image": "data/input/insert-2775000.dat",
+            "label": "data/output/insert-2775000.dat"
+        },
+        {
+            "image": "data/input/insert-320000.dat",
+            "label": "data/output/insert-320000.dat"
+        },
+        {
+            "image": "data/input/insert-840000.dat",
+            "label": "data/output/insert-840000.dat"
+        },
+        {
+            "image": "data/input/insert-2105000.dat",
+            "label": "data/output/insert-2105000.dat"
+        },
+        {
+            "image": "data/input/insert-370000.dat",
+            "label": "data/output/insert-370000.dat"
+        },
+        {
+            "image": "data/input/insert-1895000.dat",
+            "label": "data/output/insert-1895000.dat"
+        },
+        {
+            "image": "data/input/insert-2450000.dat",
+            "label": "data/output/insert-2450000.dat"
+        },
+        {
+            "image": "data/input/insert-770000.dat",
+            "label": "data/output/insert-770000.dat"
+        },
+        {
+            "image": "data/input/insert-585000.dat",
+            "label": "data/output/insert-585000.dat"
+        },
+        {
+            "image": "data/input/insert-1315000.dat",
+            "label": "data/output/insert-1315000.dat"
+        },
+        {
+            "image": "data/input/insert-2610000.dat",
+            "label": "data/output/insert-2610000.dat"
+        },
+        {
+            "image": "data/input/insert-2435000.dat",
+            "label": "data/output/insert-2435000.dat"
+        },
+        {
+            "image": "data/input/insert-135000.dat",
+            "label": "data/output/insert-135000.dat"
+        },
+        {
+            "image": "data/input/insert-1225000.dat",
+            "label": "data/output/insert-1225000.dat"
+        },
+        {
+            "image": "data/input/insert-80000.dat",
+            "label": "data/output/insert-80000.dat"
+        },
+        {
+            "image": "data/input/insert-1195000.dat",
+            "label": "data/output/insert-1195000.dat"
+        },
+        {
+            "image": "data/input/insert-1565000.dat",
+            "label": "data/output/insert-1565000.dat"
+        },
+        {
+            "image": "data/input/insert-690000.dat",
+            "label": "data/output/insert-690000.dat"
+        },
+        {
+            "image": "data/input/insert-140000.dat",
+            "label": "data/output/insert-140000.dat"
+        },
+        {
+            "image": "data/input/insert-1615000.dat",
+            "label": "data/output/insert-1615000.dat"
+        },
+        {
+            "image": "data/input/insert-2070000.dat",
+            "label": "data/output/insert-2070000.dat"
+        },
+        {
+            "image": "data/input/insert-1610000.dat",
+            "label": "data/output/insert-1610000.dat"
+        },
+        {
+            "image": "data/input/insert-1245000.dat",
+            "label": "data/output/insert-1245000.dat"
+        },
+        {
+            "image": "data/input/insert-1555000.dat",
+            "label": "data/output/insert-1555000.dat"
+        },
+        {
+            "image": "data/input/insert-2270000.dat",
+            "label": "data/output/insert-2270000.dat"
+        },
+        {
+            "image": "data/input/insert-1725000.dat",
+            "label": "data/output/insert-1725000.dat"
+        },
+        {
+            "image": "data/input/insert-1535000.dat",
+            "label": "data/output/insert-1535000.dat"
+        },
+        {
+            "image": "data/input/insert-880000.dat",
+            "label": "data/output/insert-880000.dat"
+        },
+        {
+            "image": "data/input/insert-2715000.dat",
+            "label": "data/output/insert-2715000.dat"
+        },
+        {
+            "image": "data/input/insert-245000.dat",
+            "label": "data/output/insert-245000.dat"
+        },
+        {
+            "image": "data/input/insert-145000.dat",
+            "label": "data/output/insert-145000.dat"
+        },
+        {
+            "image": "data/input/insert-1285000.dat",
+            "label": "data/output/insert-1285000.dat"
+        },
+        {
+            "image": "data/input/insert-2350000.dat",
+            "label": "data/output/insert-2350000.dat"
+        },
+        {
+            "image": "data/input/insert-1420000.dat",
+            "label": "data/output/insert-1420000.dat"
+        },
+        {
+            "image": "data/input/insert-260000.dat",
+            "label": "data/output/insert-260000.dat"
+        },
+        {
+            "image": "data/input/insert-2585000.dat",
+            "label": "data/output/insert-2585000.dat"
+        },
+        {
+            "image": "data/input/insert-415000.dat",
+            "label": "data/output/insert-415000.dat"
+        },
+        {
+            "image": "data/input/insert-65000.dat",
+            "label": "data/output/insert-65000.dat"
+        },
+        {
+            "image": "data/input/insert-1795000.dat",
+            "label": "data/output/insert-1795000.dat"
+        },
+        {
+            "image": "data/input/insert-1110000.dat",
+            "label": "data/output/insert-1110000.dat"
+        },
+        {
+            "image": "data/input/insert-1355000.dat",
+            "label": "data/output/insert-1355000.dat"
+        },
+        {
+            "image": "data/input/insert-1325000.dat",
+            "label": "data/output/insert-1325000.dat"
+        },
+        {
+            "image": "data/input/insert-1470000.dat",
+            "label": "data/output/insert-1470000.dat"
+        },
+        {
+            "image": "data/input/insert-1935000.dat",
+            "label": "data/output/insert-1935000.dat"
+        },
+        {
+            "image": "data/input/insert-875000.dat",
+            "label": "data/output/insert-875000.dat"
+        },
+        {
+            "image": "data/input/insert-1465000.dat",
+            "label": "data/output/insert-1465000.dat"
+        },
+        {
+            "image": "data/input/insert-110000.dat",
+            "label": "data/output/insert-110000.dat"
+        },
+        {
+            "image": "data/input/insert-2745000.dat",
+            "label": "data/output/insert-2745000.dat"
+        },
+        {
+            "image": "data/input/insert-285000.dat",
+            "label": "data/output/insert-285000.dat"
+        },
+        {
+            "image": "data/input/insert-2590000.dat",
+            "label": "data/output/insert-2590000.dat"
+        },
+        {
+            "image": "data/input/insert-2440000.dat",
+            "label": "data/output/insert-2440000.dat"
+        },
+        {
+            "image": "data/input/insert-1820000.dat",
+            "label": "data/output/insert-1820000.dat"
+        },
+        {
+            "image": "data/input/insert-1945000.dat",
+            "label": "data/output/insert-1945000.dat"
+        },
+        {
+            "image": "data/input/insert-1080000.dat",
+            "label": "data/output/insert-1080000.dat"
+        },
+        {
+            "image": "data/input/insert-1910000.dat",
+            "label": "data/output/insert-1910000.dat"
+        },
+        {
+            "image": "data/input/insert-1375000.dat",
+            "label": "data/output/insert-1375000.dat"
+        },
+        {
+            "image": "data/input/insert-1980000.dat",
+            "label": "data/output/insert-1980000.dat"
+        },
+        {
+            "image": "data/input/insert-2300000.dat",
+            "label": "data/output/insert-2300000.dat"
+        },
+        {
+            "image": "data/input/insert-1185000.dat",
+            "label": "data/output/insert-1185000.dat"
+        },
+        {
+            "image": "data/input/insert-395000.dat",
+            "label": "data/output/insert-395000.dat"
+        },
+        {
+            "image": "data/input/insert-930000.dat",
+            "label": "data/output/insert-930000.dat"
+        },
+        {
+            "image": "data/input/insert-1000000.dat",
+            "label": "data/output/insert-1000000.dat"
+        },
+        {
+            "image": "data/input/insert-1035000.dat",
+            "label": "data/output/insert-1035000.dat"
+        },
+        {
+            "image": "data/input/insert-1230000.dat",
+            "label": "data/output/insert-1230000.dat"
+        },
+        {
+            "image": "data/input/insert-660000.dat",
+            "label": "data/output/insert-660000.dat"
+        },
+        {
+            "image": "data/input/insert-1890000.dat",
+            "label": "data/output/insert-1890000.dat"
+        },
+        {
+            "image": "data/input/insert-2445000.dat",
+            "label": "data/output/insert-2445000.dat"
+        },
+        {
+            "image": "data/input/insert-20000.dat",
+            "label": "data/output/insert-20000.dat"
+        },
+        {
+            "image": "data/input/insert-1290000.dat",
+            "label": "data/output/insert-1290000.dat"
+        },
+        {
+            "image": "data/input/insert-1955000.dat",
+            "label": "data/output/insert-1955000.dat"
+        },
+        {
+            "image": "data/input/insert-2210000.dat",
+            "label": "data/output/insert-2210000.dat"
+        },
+        {
+            "image": "data/input/insert-2130000.dat",
+            "label": "data/output/insert-2130000.dat"
+        },
+        {
+            "image": "data/input/insert-1835000.dat",
+            "label": "data/output/insert-1835000.dat"
+        },
+        {
+            "image": "data/input/insert-505000.dat",
+            "label": "data/output/insert-505000.dat"
+        },
+        {
+            "image": "data/input/insert-1655000.dat",
+            "label": "data/output/insert-1655000.dat"
+        },
+        {
+            "image": "data/input/insert-750000.dat",
+            "label": "data/output/insert-750000.dat"
+        },
+        {
+            "image": "data/input/insert-2520000.dat",
+            "label": "data/output/insert-2520000.dat"
+        },
+        {
+            "image": "data/input/insert-735000.dat",
+            "label": "data/output/insert-735000.dat"
+        },
+        {
+            "image": "data/input/insert-765000.dat",
+            "label": "data/output/insert-765000.dat"
+        },
+        {
+            "image": "data/input/insert-1560000.dat",
+            "label": "data/output/insert-1560000.dat"
+        },
+        {
+            "image": "data/input/insert-1100000.dat",
+            "label": "data/output/insert-1100000.dat"
+        },
+        {
+            "image": "data/input/insert-720000.dat",
+            "label": "data/output/insert-720000.dat"
+        },
+        {
+            "image": "data/input/insert-315000.dat",
+            "label": "data/output/insert-315000.dat"
+        },
+        {
+            "image": "data/input/insert-230000.dat",
+            "label": "data/output/insert-230000.dat"
+        },
+        {
+            "image": "data/input/insert-2065000.dat",
+            "label": "data/output/insert-2065000.dat"
+        },
+        {
+            "image": "data/input/insert-1390000.dat",
+            "label": "data/output/insert-1390000.dat"
+        },
+        {
+            "image": "data/input/insert-830000.dat",
+            "label": "data/output/insert-830000.dat"
+        },
+        {
+            "image": "data/input/insert-2490000.dat",
+            "label": "data/output/insert-2490000.dat"
+        },
+        {
+            "image": "data/input/insert-1335000.dat",
+            "label": "data/output/insert-1335000.dat"
+        },
+        {
+            "image": "data/input/insert-2120000.dat",
+            "label": "data/output/insert-2120000.dat"
+        },
+        {
+            "image": "data/input/insert-2180000.dat",
+            "label": "data/output/insert-2180000.dat"
+        },
+        {
+            "image": "data/input/insert-905000.dat",
+            "label": "data/output/insert-905000.dat"
+        },
+        {
+            "image": "data/input/insert-375000.dat",
+            "label": "data/output/insert-375000.dat"
+        },
+        {
+            "image": "data/input/insert-2260000.dat",
+            "label": "data/output/insert-2260000.dat"
+        },
+        {
+            "image": "data/input/insert-995000.dat",
+            "label": "data/output/insert-995000.dat"
+        },
+        {
+            "image": "data/input/insert-325000.dat",
+            "label": "data/output/insert-325000.dat"
+        },
+        {
+            "image": "data/input/insert-760000.dat",
+            "label": "data/output/insert-760000.dat"
+        },
+        {
+            "image": "data/input/insert-635000.dat",
+            "label": "data/output/insert-635000.dat"
+        },
+        {
+            "image": "data/input/insert-835000.dat",
+            "label": "data/output/insert-835000.dat"
+        },
+        {
+            "image": "data/input/insert-2795000.dat",
+            "label": "data/output/insert-2795000.dat"
+        },
+        {
+            "image": "data/input/insert-785000.dat",
+            "label": "data/output/insert-785000.dat"
+        },
+        {
+            "image": "data/input/insert-515000.dat",
+            "label": "data/output/insert-515000.dat"
+        },
+        {
+            "image": "data/input/insert-615000.dat",
+            "label": "data/output/insert-615000.dat"
+        },
+        {
+            "image": "data/input/insert-40000.dat",
+            "label": "data/output/insert-40000.dat"
+        },
+        {
+            "image": "data/input/insert-490000.dat",
+            "label": "data/output/insert-490000.dat"
+        },
+        {
+            "image": "data/input/insert-2370000.dat",
+            "label": "data/output/insert-2370000.dat"
+        },
+        {
+            "image": "data/input/insert-575000.dat",
+            "label": "data/output/insert-575000.dat"
+        },
+        {
+            "image": "data/input/insert-1790000.dat",
+            "label": "data/output/insert-1790000.dat"
+        },
+        {
+            "image": "data/input/insert-1140000.dat",
+            "label": "data/output/insert-1140000.dat"
+        },
+        {
+            "image": "data/input/insert-2380000.dat",
+            "label": "data/output/insert-2380000.dat"
+        },
+        {
+            "image": "data/input/insert-2285000.dat",
+            "label": "data/output/insert-2285000.dat"
+        },
+        {
+            "image": "data/input/insert-1425000.dat",
+            "label": "data/output/insert-1425000.dat"
+        },
+        {
+            "image": "data/input/insert-2135000.dat",
+            "label": "data/output/insert-2135000.dat"
+        },
+        {
+            "image": "data/input/insert-2410000.dat",
+            "label": "data/output/insert-2410000.dat"
+        },
+        {
+            "image": "data/input/insert-2720000.dat",
+            "label": "data/output/insert-2720000.dat"
+        },
+        {
+            "image": "data/input/insert-2240000.dat",
+            "label": "data/output/insert-2240000.dat"
+        },
+        {
+            "image": "data/input/insert-1440000.dat",
+            "label": "data/output/insert-1440000.dat"
+        },
+        {
+            "image": "data/input/insert-1030000.dat",
+            "label": "data/output/insert-1030000.dat"
+        },
+        {
+            "image": "data/input/insert-2235000.dat",
+            "label": "data/output/insert-2235000.dat"
+        },
+        {
+            "image": "data/input/insert-1360000.dat",
+            "label": "data/output/insert-1360000.dat"
+        },
+        {
+            "image": "data/input/insert-990000.dat",
+            "label": "data/output/insert-990000.dat"
+        },
+        {
+            "image": "data/input/insert-1670000.dat",
+            "label": "data/output/insert-1670000.dat"
+        },
+        {
+            "image": "data/input/insert-225000.dat",
+            "label": "data/output/insert-225000.dat"
+        },
+        {
+            "image": "data/input/insert-2000000.dat",
+            "label": "data/output/insert-2000000.dat"
+        },
+        {
+            "image": "data/input/insert-2190000.dat",
+            "label": "data/output/insert-2190000.dat"
+        },
+        {
+            "image": "data/input/insert-520000.dat",
+            "label": "data/output/insert-520000.dat"
+        },
+        {
+            "image": "data/input/insert-175000.dat",
+            "label": "data/output/insert-175000.dat"
+        },
+        {
+            "image": "data/input/insert-1940000.dat",
+            "label": "data/output/insert-1940000.dat"
+        },
+        {
+            "image": "data/input/insert-1490000.dat",
+            "label": "data/output/insert-1490000.dat"
+        },
+        {
+            "image": "data/input/insert-2580000.dat",
+            "label": "data/output/insert-2580000.dat"
+        },
+        {
+            "image": "data/input/insert-1350000.dat",
+            "label": "data/output/insert-1350000.dat"
+        },
+        {
+            "image": "data/input/insert-1540000.dat",
+            "label": "data/output/insert-1540000.dat"
+        },
+        {
+            "image": "data/input/insert-215000.dat",
+            "label": "data/output/insert-215000.dat"
+        },
+        {
+            "image": "data/input/insert-1585000.dat",
+            "label": "data/output/insert-1585000.dat"
+        },
+        {
+            "image": "data/input/insert-1995000.dat",
+            "label": "data/output/insert-1995000.dat"
+        },
+        {
+            "image": "data/input/insert-715000.dat",
+            "label": "data/output/insert-715000.dat"
+        },
+        {
+            "image": "data/input/insert-1990000.dat",
+            "label": "data/output/insert-1990000.dat"
+        },
+        {
+            "image": "data/input/insert-1500000.dat",
+            "label": "data/output/insert-1500000.dat"
+        },
+        {
+            "image": "data/input/insert-2360000.dat",
+            "label": "data/output/insert-2360000.dat"
+        },
+        {
+            "image": "data/input/insert-2650000.dat",
+            "label": "data/output/insert-2650000.dat"
+        },
+        {
+            "image": "data/input/insert-2310000.dat",
+            "label": "data/output/insert-2310000.dat"
+        },
+        {
+            "image": "data/input/insert-885000.dat",
+            "label": "data/output/insert-885000.dat"
+        },
+        {
+            "image": "data/input/insert-2415000.dat",
+            "label": "data/output/insert-2415000.dat"
+        },
+        {
+            "image": "data/input/insert-435000.dat",
+            "label": "data/output/insert-435000.dat"
+        },
+        {
+            "image": "data/input/insert-2030000.dat",
+            "label": "data/output/insert-2030000.dat"
+        },
+        {
+            "image": "data/input/insert-1620000.dat",
+            "label": "data/output/insert-1620000.dat"
+        },
+        {
+            "image": "data/input/insert-2455000.dat",
+            "label": "data/output/insert-2455000.dat"
+        },
+        {
+            "image": "data/input/insert-50000.dat",
+            "label": "data/output/insert-50000.dat"
+        },
+        {
+            "image": "data/input/insert-2485000.dat",
+            "label": "data/output/insert-2485000.dat"
+        },
+        {
+            "image": "data/input/insert-1925000.dat",
+            "label": "data/output/insert-1925000.dat"
+        },
+        {
+            "image": "data/input/insert-2640000.dat",
+            "label": "data/output/insert-2640000.dat"
+        },
+        {
+            "image": "data/input/insert-1700000.dat",
+            "label": "data/output/insert-1700000.dat"
+        },
+        {
+            "image": "data/input/insert-1115000.dat",
+            "label": "data/output/insert-1115000.dat"
+        },
+        {
+            "image": "data/input/insert-1450000.dat",
+            "label": "data/output/insert-1450000.dat"
+        },
+        {
+            "image": "data/input/insert-1545000.dat",
+            "label": "data/output/insert-1545000.dat"
+        },
+        {
+            "image": "data/input/insert-1735000.dat",
+            "label": "data/output/insert-1735000.dat"
+        },
+        {
+            "image": "data/input/insert-2680000.dat",
+            "label": "data/output/insert-2680000.dat"
+        },
+        {
+            "image": "data/input/insert-1865000.dat",
+            "label": "data/output/insert-1865000.dat"
+        },
+        {
+            "image": "data/input/insert-330000.dat",
+            "label": "data/output/insert-330000.dat"
+        },
+        {
+            "image": "data/input/insert-1345000.dat",
+            "label": "data/output/insert-1345000.dat"
+        },
+        {
+            "image": "data/input/insert-2230000.dat",
+            "label": "data/output/insert-2230000.dat"
+        },
+        {
+            "image": "data/input/insert-2205000.dat",
+            "label": "data/output/insert-2205000.dat"
+        },
+        {
+            "image": "data/input/insert-440000.dat",
+            "label": "data/output/insert-440000.dat"
+        },
+        {
+            "image": "data/input/insert-1800000.dat",
+            "label": "data/output/insert-1800000.dat"
+        },
+        {
+            "image": "data/input/insert-1645000.dat",
+            "label": "data/output/insert-1645000.dat"
+        },
+        {
+            "image": "data/input/insert-895000.dat",
+            "label": "data/output/insert-895000.dat"
+        },
+        {
+            "image": "data/input/insert-2495000.dat",
+            "label": "data/output/insert-2495000.dat"
+        },
+        {
+            "image": "data/input/insert-755000.dat",
+            "label": "data/output/insert-755000.dat"
+        },
+        {
+            "image": "data/input/insert-270000.dat",
+            "label": "data/output/insert-270000.dat"
+        },
+        {
+            "image": "data/input/insert-1060000.dat",
+            "label": "data/output/insert-1060000.dat"
+        },
+        {
+            "image": "data/input/insert-560000.dat",
+            "label": "data/output/insert-560000.dat"
+        },
+        {
+            "image": "data/input/insert-165000.dat",
+            "label": "data/output/insert-165000.dat"
+        },
+        {
+            "image": "data/input/insert-360000.dat",
+            "label": "data/output/insert-360000.dat"
+        },
+        {
+            "image": "data/input/insert-305000.dat",
+            "label": "data/output/insert-305000.dat"
+        },
+        {
+            "image": "data/input/insert-2040000.dat",
+            "label": "data/output/insert-2040000.dat"
+        },
+        {
+            "image": "data/input/insert-810000.dat",
+            "label": "data/output/insert-810000.dat"
+        },
+        {
+            "image": "data/input/insert-2275000.dat",
+            "label": "data/output/insert-2275000.dat"
+        },
+        {
+            "image": "data/input/insert-2765000.dat",
+            "label": "data/output/insert-2765000.dat"
+        },
+        {
+            "image": "data/input/insert-1975000.dat",
+            "label": "data/output/insert-1975000.dat"
+        },
+        {
+            "image": "data/input/insert-195000.dat",
+            "label": "data/output/insert-195000.dat"
+        },
+        {
+            "image": "data/input/insert-2060000.dat",
+            "label": "data/output/insert-2060000.dat"
+        },
+        {
+            "image": "data/input/insert-865000.dat",
+            "label": "data/output/insert-865000.dat"
+        },
+        {
+            "image": "data/input/insert-1260000.dat",
+            "label": "data/output/insert-1260000.dat"
+        },
+        {
+            "image": "data/input/insert-2785000.dat",
+            "label": "data/output/insert-2785000.dat"
+        },
+        {
+            "image": "data/input/insert-795000.dat",
+            "label": "data/output/insert-795000.dat"
+        },
+        {
+            "image": "data/input/insert-2085000.dat",
+            "label": "data/output/insert-2085000.dat"
+        },
+        {
+            "image": "data/input/insert-610000.dat",
+            "label": "data/output/insert-610000.dat"
+        },
+        {
+            "image": "data/input/insert-345000.dat",
+            "label": "data/output/insert-345000.dat"
+        },
+        {
+            "image": "data/input/insert-1715000.dat",
+            "label": "data/output/insert-1715000.dat"
+        },
+        {
+            "image": "data/input/insert-2035000.dat",
+            "label": "data/output/insert-2035000.dat"
+        },
+        {
+            "image": "data/input/insert-2740000.dat",
+            "label": "data/output/insert-2740000.dat"
+        },
+        {
+            "image": "data/input/insert-2770000.dat",
+            "label": "data/output/insert-2770000.dat"
+        },
+        {
+            "image": "data/input/insert-2575000.dat",
+            "label": "data/output/insert-2575000.dat"
+        },
+        {
+            "image": "data/input/insert-10000.dat",
+            "label": "data/output/insert-10000.dat"
+        },
+        {
+            "image": "data/input/insert-2510000.dat",
+            "label": "data/output/insert-2510000.dat"
+        },
+        {
+            "image": "data/input/insert-250000.dat",
+            "label": "data/output/insert-250000.dat"
+        },
+        {
+            "image": "data/input/insert-2390000.dat",
+            "label": "data/output/insert-2390000.dat"
+        },
+        {
+            "image": "data/input/insert-1985000.dat",
+            "label": "data/output/insert-1985000.dat"
+        },
+        {
+            "image": "data/input/insert-1915000.dat",
+            "label": "data/output/insert-1915000.dat"
+        },
+        {
+            "image": "data/input/insert-1175000.dat",
+            "label": "data/output/insert-1175000.dat"
+        },
+        {
+            "image": "data/input/insert-800000.dat",
+            "label": "data/output/insert-800000.dat"
+        },
+        {
+            "image": "data/input/insert-900000.dat",
+            "label": "data/output/insert-900000.dat"
+        },
+        {
+            "image": "data/input/insert-60000.dat",
+            "label": "data/output/insert-60000.dat"
+        },
+        {
+            "image": "data/input/insert-1740000.dat",
+            "label": "data/output/insert-1740000.dat"
+        },
+        {
+            "image": "data/input/insert-1435000.dat",
+            "label": "data/output/insert-1435000.dat"
+        },
+        {
+            "image": "data/input/insert-2500000.dat",
+            "label": "data/output/insert-2500000.dat"
+        },
+        {
+            "image": "data/input/insert-2050000.dat",
+            "label": "data/output/insert-2050000.dat"
+        },
+        {
+            "image": "data/input/insert-2375000.dat",
+            "label": "data/output/insert-2375000.dat"
+        },
+        {
+            "image": "data/input/insert-860000.dat",
+            "label": "data/output/insert-860000.dat"
+        },
+        {
+            "image": "data/input/insert-2465000.dat",
+            "label": "data/output/insert-2465000.dat"
+        },
+        {
+            "image": "data/input/insert-2675000.dat",
+            "label": "data/output/insert-2675000.dat"
+        },
+        {
+            "image": "data/input/insert-780000.dat",
+            "label": "data/output/insert-780000.dat"
+        },
+        {
+            "image": "data/input/insert-650000.dat",
+            "label": "data/output/insert-650000.dat"
+        },
+        {
+            "image": "data/input/insert-1320000.dat",
+            "label": "data/output/insert-1320000.dat"
+        },
+        {
+            "image": "data/input/insert-265000.dat",
+            "label": "data/output/insert-265000.dat"
+        },
+        {
+            "image": "data/input/insert-1165000.dat",
+            "label": "data/output/insert-1165000.dat"
+        },
+        {
+            "image": "data/input/insert-775000.dat",
+            "label": "data/output/insert-775000.dat"
+        },
+        {
+            "image": "data/input/insert-455000.dat",
+            "label": "data/output/insert-455000.dat"
+        },
+        {
+            "image": "data/input/insert-2295000.dat",
+            "label": "data/output/insert-2295000.dat"
+        },
+        {
+            "image": "data/input/insert-1400000.dat",
+            "label": "data/output/insert-1400000.dat"
+        },
+        {
+            "image": "data/input/insert-1730000.dat",
+            "label": "data/output/insert-1730000.dat"
+        },
+        {
+            "image": "data/input/insert-1090000.dat",
+            "label": "data/output/insert-1090000.dat"
+        },
+        {
+            "image": "data/input/insert-1055000.dat",
+            "label": "data/output/insert-1055000.dat"
+        },
+        {
+            "image": "data/input/insert-1860000.dat",
+            "label": "data/output/insert-1860000.dat"
+        },
+        {
+            "image": "data/input/insert-2430000.dat",
+            "label": "data/output/insert-2430000.dat"
+        },
+        {
+            "image": "data/input/insert-2395000.dat",
+            "label": "data/output/insert-2395000.dat"
+        },
+        {
+            "image": "data/input/insert-90000.dat",
+            "label": "data/output/insert-90000.dat"
+        },
+        {
+            "image": "data/input/insert-625000.dat",
+            "label": "data/output/insert-625000.dat"
+        },
+        {
+            "image": "data/input/insert-1365000.dat",
+            "label": "data/output/insert-1365000.dat"
+        },
+        {
+            "image": "data/input/insert-920000.dat",
+            "label": "data/output/insert-920000.dat"
+        },
+        {
+            "image": "data/input/insert-1025000.dat",
+            "label": "data/output/insert-1025000.dat"
+        },
+        {
+            "image": "data/input/insert-2760000.dat",
+            "label": "data/output/insert-2760000.dat"
+        },
+        {
+            "image": "data/input/insert-70000.dat",
+            "label": "data/output/insert-70000.dat"
+        },
+        {
+            "image": "data/input/insert-1040000.dat",
+            "label": "data/output/insert-1040000.dat"
+        },
+        {
+            "image": "data/input/insert-530000.dat",
+            "label": "data/output/insert-530000.dat"
+        },
+        {
+            "image": "data/input/insert-945000.dat",
+            "label": "data/output/insert-945000.dat"
+        },
+        {
+            "image": "data/input/insert-185000.dat",
+            "label": "data/output/insert-185000.dat"
+        },
+        {
+            "image": "data/input/insert-1015000.dat",
+            "label": "data/output/insert-1015000.dat"
+        },
+        {
+            "image": "data/input/insert-640000.dat",
+            "label": "data/output/insert-640000.dat"
+        },
+        {
+            "image": "data/input/insert-2530000.dat",
+            "label": "data/output/insert-2530000.dat"
+        },
+        {
+            "image": "data/input/insert-450000.dat",
+            "label": "data/output/insert-450000.dat"
+        },
+        {
+            "image": "data/input/insert-525000.dat",
+            "label": "data/output/insert-525000.dat"
+        },
+        {
+            "image": "data/input/insert-2075000.dat",
+            "label": "data/output/insert-2075000.dat"
+        },
+        {
+            "image": "data/input/insert-955000.dat",
+            "label": "data/output/insert-955000.dat"
+        },
+        {
+            "image": "data/input/insert-390000.dat",
+            "label": "data/output/insert-390000.dat"
+        },
+        {
+            "image": "data/input/insert-730000.dat",
+            "label": "data/output/insert-730000.dat"
+        },
+        {
+            "image": "data/input/insert-2320000.dat",
+            "label": "data/output/insert-2320000.dat"
+        },
+        {
+            "image": "data/input/insert-2425000.dat",
+            "label": "data/output/insert-2425000.dat"
+        },
+        {
+            "image": "data/input/insert-1660000.dat",
+            "label": "data/output/insert-1660000.dat"
+        },
+        {
+            "image": "data/input/insert-1575000.dat",
+            "label": "data/output/insert-1575000.dat"
+        },
+        {
+            "image": "data/input/insert-685000.dat",
+            "label": "data/output/insert-685000.dat"
+        },
+        {
+            "image": "data/input/insert-825000.dat",
+            "label": "data/output/insert-825000.dat"
+        },
+        {
+            "image": "data/input/insert-2015000.dat",
+            "label": "data/output/insert-2015000.dat"
+        },
+        {
+            "image": "data/input/insert-1965000.dat",
+            "label": "data/output/insert-1965000.dat"
+        },
+        {
+            "image": "data/input/insert-1075000.dat",
+            "label": "data/output/insert-1075000.dat"
+        },
+        {
+            "image": "data/input/insert-430000.dat",
+            "label": "data/output/insert-430000.dat"
+        },
+        {
+            "image": "data/input/insert-1330000.dat",
+            "label": "data/output/insert-1330000.dat"
+        },
+        {
+            "image": "data/input/insert-2570000.dat",
+            "label": "data/output/insert-2570000.dat"
+        },
+        {
+            "image": "data/input/insert-1590000.dat",
+            "label": "data/output/insert-1590000.dat"
+        },
+        {
+            "image": "data/input/insert-160000.dat",
+            "label": "data/output/insert-160000.dat"
+        },
+        {
+            "image": "data/input/insert-2540000.dat",
+            "label": "data/output/insert-2540000.dat"
+        },
+        {
+            "image": "data/input/insert-1180000.dat",
+            "label": "data/output/insert-1180000.dat"
+        },
+        {
+            "image": "data/input/insert-1855000.dat",
+            "label": "data/output/insert-1855000.dat"
+        },
+        {
+            "image": "data/input/insert-845000.dat",
+            "label": "data/output/insert-845000.dat"
+        },
+        {
+            "image": "data/input/insert-1310000.dat",
+            "label": "data/output/insert-1310000.dat"
+        },
+        {
+            "image": "data/input/insert-1970000.dat",
+            "label": "data/output/insert-1970000.dat"
+        },
+        {
+            "image": "data/input/insert-1220000.dat",
+            "label": "data/output/insert-1220000.dat"
+        },
+        {
+            "image": "data/input/insert-2515000.dat",
+            "label": "data/output/insert-2515000.dat"
+        },
+        {
+            "image": "data/input/insert-420000.dat",
+            "label": "data/output/insert-420000.dat"
+        },
+        {
+            "image": "data/input/insert-2160000.dat",
+            "label": "data/output/insert-2160000.dat"
+        },
+        {
+            "image": "data/input/insert-1930000.dat",
+            "label": "data/output/insert-1930000.dat"
+        },
+        {
+            "image": "data/input/insert-2755000.dat",
+            "label": "data/output/insert-2755000.dat"
+        },
+        {
+            "image": "data/input/insert-480000.dat",
+            "label": "data/output/insert-480000.dat"
+        },
+        {
+            "image": "data/input/insert-1190000.dat",
+            "label": "data/output/insert-1190000.dat"
+        },
+        {
+            "image": "data/input/insert-550000.dat",
+            "label": "data/output/insert-550000.dat"
+        },
+        {
+            "image": "data/input/insert-2115000.dat",
+            "label": "data/output/insert-2115000.dat"
+        },
+        {
+            "image": "data/input/insert-890000.dat",
+            "label": "data/output/insert-890000.dat"
+        },
+        {
+            "image": "data/input/insert-1215000.dat",
+            "label": "data/output/insert-1215000.dat"
+        },
+        {
+            "image": "data/input/insert-1765000.dat",
+            "label": "data/output/insert-1765000.dat"
+        },
+        {
+            "image": "data/input/insert-705000.dat",
+            "label": "data/output/insert-705000.dat"
+        },
+        {
+            "image": "data/input/insert-85000.dat",
+            "label": "data/output/insert-85000.dat"
+        },
+        {
+            "image": "data/input/insert-295000.dat",
+            "label": "data/output/insert-295000.dat"
+        },
+        {
+            "image": "data/input/insert-465000.dat",
+            "label": "data/output/insert-465000.dat"
+        },
+        {
+            "image": "data/input/insert-210000.dat",
+            "label": "data/output/insert-210000.dat"
+        },
+        {
+            "image": "data/input/insert-2155000.dat",
+            "label": "data/output/insert-2155000.dat"
+        },
+        {
+            "image": "data/input/insert-630000.dat",
+            "label": "data/output/insert-630000.dat"
+        },
+        {
+            "image": "data/input/insert-1515000.dat",
+            "label": "data/output/insert-1515000.dat"
+        },
+        {
+            "image": "data/input/insert-1295000.dat",
+            "label": "data/output/insert-1295000.dat"
+        },
+        {
+            "image": "data/input/insert-170000.dat",
+            "label": "data/output/insert-170000.dat"
+        },
+        {
+            "image": "data/input/insert-975000.dat",
+            "label": "data/output/insert-975000.dat"
+        },
+        {
+            "image": "data/input/insert-2080000.dat",
+            "label": "data/output/insert-2080000.dat"
+        },
+        {
+            "image": "data/input/insert-600000.dat",
+            "label": "data/output/insert-600000.dat"
+        },
+        {
+            "image": "data/input/insert-2690000.dat",
+            "label": "data/output/insert-2690000.dat"
+        },
+        {
+            "image": "data/input/insert-95000.dat",
+            "label": "data/output/insert-95000.dat"
+        },
+        {
+            "image": "data/input/insert-2020000.dat",
+            "label": "data/output/insert-2020000.dat"
+        },
+        {
+            "image": "data/input/insert-500000.dat",
+            "label": "data/output/insert-500000.dat"
+        },
+        {
+            "image": "data/input/insert-1780000.dat",
+            "label": "data/output/insert-1780000.dat"
+        },
+        {
+            "image": "data/input/insert-2815000.dat",
+            "label": "data/output/insert-2815000.dat"
+        },
+        {
+            "image": "data/input/insert-1120000.dat",
+            "label": "data/output/insert-1120000.dat"
+        },
+        {
+            "image": "data/input/insert-405000.dat",
+            "label": "data/output/insert-405000.dat"
+        },
+        {
+            "image": "data/input/insert-965000.dat",
+            "label": "data/output/insert-965000.dat"
+        },
+        {
+            "image": "data/input/insert-790000.dat",
+            "label": "data/output/insert-790000.dat"
+        },
+        {
+            "image": "data/input/insert-1405000.dat",
+            "label": "data/output/insert-1405000.dat"
+        },
+        {
+            "image": "data/input/insert-670000.dat",
+            "label": "data/output/insert-670000.dat"
+        },
+        {
+            "image": "data/input/insert-2100000.dat",
+            "label": "data/output/insert-2100000.dat"
+        },
+        {
+            "image": "data/input/insert-1255000.dat",
+            "label": "data/output/insert-1255000.dat"
+        },
+        {
+            "image": "data/input/insert-645000.dat",
+            "label": "data/output/insert-645000.dat"
+        },
+        {
+            "image": "data/input/insert-1010000.dat",
+            "label": "data/output/insert-1010000.dat"
+        },
+        {
+            "image": "data/input/insert-1480000.dat",
+            "label": "data/output/insert-1480000.dat"
+        },
+        {
+            "image": "data/input/insert-400000.dat",
+            "label": "data/output/insert-400000.dat"
+        },
+        {
+            "image": "data/input/insert-2705000.dat",
+            "label": "data/output/insert-2705000.dat"
+        },
+        {
+            "image": "data/input/insert-2710000.dat",
+            "label": "data/output/insert-2710000.dat"
+        },
+        {
+            "image": "data/input/insert-1085000.dat",
+            "label": "data/output/insert-1085000.dat"
+        },
+        {
+            "image": "data/input/insert-180000.dat",
+            "label": "data/output/insert-180000.dat"
+        },
+        {
+            "image": "data/input/insert-2810000.dat",
+            "label": "data/output/insert-2810000.dat"
+        },
+        {
+            "image": "data/input/insert-620000.dat",
+            "label": "data/output/insert-620000.dat"
+        },
+        {
+            "image": "data/input/insert-1685000.dat",
+            "label": "data/output/insert-1685000.dat"
+        },
+        {
+            "image": "data/input/insert-2255000.dat",
+            "label": "data/output/insert-2255000.dat"
+        },
+        {
+            "image": "data/input/insert-2280000.dat",
+            "label": "data/output/insert-2280000.dat"
+        },
+        {
+            "image": "data/input/insert-2695000.dat",
+            "label": "data/output/insert-2695000.dat"
+        },
+        {
+            "image": "data/input/insert-985000.dat",
+            "label": "data/output/insert-985000.dat"
+        },
+        {
+            "image": "data/input/insert-240000.dat",
+            "label": "data/output/insert-240000.dat"
+        },
+        {
+            "image": "data/input/insert-2175000.dat",
+            "label": "data/output/insert-2175000.dat"
+        },
+        {
+            "image": "data/input/insert-2725000.dat",
+            "label": "data/output/insert-2725000.dat"
+        },
+        {
+            "image": "data/input/insert-290000.dat",
+            "label": "data/output/insert-290000.dat"
+        },
+        {
+            "image": "data/input/insert-1135000.dat",
+            "label": "data/output/insert-1135000.dat"
+        },
+        {
+            "image": "data/input/insert-340000.dat",
+            "label": "data/output/insert-340000.dat"
+        },
+        {
+            "image": "data/input/insert-605000.dat",
+            "label": "data/output/insert-605000.dat"
+        },
+        {
+            "image": "data/input/insert-5000.dat",
+            "label": "data/output/insert-5000.dat"
+        },
+        {
+            "image": "data/input/insert-2730000.dat",
+            "label": "data/output/insert-2730000.dat"
+        },
+        {
+            "image": "data/input/insert-2620000.dat",
+            "label": "data/output/insert-2620000.dat"
+        },
+        {
+            "image": "data/input/insert-410000.dat",
+            "label": "data/output/insert-410000.dat"
+        },
+        {
+            "image": "data/input/insert-2665000.dat",
+            "label": "data/output/insert-2665000.dat"
+        },
+        {
+            "image": "data/input/insert-1570000.dat",
+            "label": "data/output/insert-1570000.dat"
+        },
+        {
+            "image": "data/input/insert-655000.dat",
+            "label": "data/output/insert-655000.dat"
+        },
+        {
+            "image": "data/input/insert-2290000.dat",
+            "label": "data/output/insert-2290000.dat"
+        },
+        {
+            "image": "data/input/insert-1235000.dat",
+            "label": "data/output/insert-1235000.dat"
+        },
+        {
+            "image": "data/input/insert-1145000.dat",
+            "label": "data/output/insert-1145000.dat"
+        },
+        {
+            "image": "data/input/insert-2615000.dat",
+            "label": "data/output/insert-2615000.dat"
+        },
+        {
+            "image": "data/input/insert-1825000.dat",
+            "label": "data/output/insert-1825000.dat"
+        },
+        {
+            "image": "data/input/insert-1170000.dat",
+            "label": "data/output/insert-1170000.dat"
+        },
+        {
+            "image": "data/input/insert-2140000.dat",
+            "label": "data/output/insert-2140000.dat"
+        },
+        {
+            "image": "data/input/insert-2600000.dat",
+            "label": "data/output/insert-2600000.dat"
+        },
+        {
+            "image": "data/input/insert-595000.dat",
+            "label": "data/output/insert-595000.dat"
+        },
+        {
+            "image": "data/input/insert-1530000.dat",
+            "label": "data/output/insert-1530000.dat"
+        },
+        {
+            "image": "data/input/insert-540000.dat",
+            "label": "data/output/insert-540000.dat"
+        },
+        {
+            "image": "data/input/insert-25000.dat",
+            "label": "data/output/insert-25000.dat"
+        },
+        {
+            "image": "data/input/insert-815000.dat",
+            "label": "data/output/insert-815000.dat"
+        },
+        {
+            "image": "data/input/insert-2315000.dat",
+            "label": "data/output/insert-2315000.dat"
+        },
+        {
+            "image": "data/input/insert-220000.dat",
+            "label": "data/output/insert-220000.dat"
+        },
+        {
+            "image": "data/input/insert-1705000.dat",
+            "label": "data/output/insert-1705000.dat"
+        },
+        {
+            "image": "data/input/insert-1520000.dat",
+            "label": "data/output/insert-1520000.dat"
+        },
+        {
+            "image": "data/input/insert-445000.dat",
+            "label": "data/output/insert-445000.dat"
+        },
+        {
+            "image": "data/input/insert-1905000.dat",
+            "label": "data/output/insert-1905000.dat"
+        },
+        {
+            "image": "data/input/insert-1950000.dat",
+            "label": "data/output/insert-1950000.dat"
+        },
+        {
+            "image": "data/input/insert-1455000.dat",
+            "label": "data/output/insert-1455000.dat"
+        },
+        {
+            "image": "data/input/insert-1805000.dat",
+            "label": "data/output/insert-1805000.dat"
+        },
+        {
+            "image": "data/input/insert-1635000.dat",
+            "label": "data/output/insert-1635000.dat"
+        },
+        {
+            "image": "data/input/insert-2635000.dat",
+            "label": "data/output/insert-2635000.dat"
+        },
+        {
+            "image": "data/input/insert-2225000.dat",
+            "label": "data/output/insert-2225000.dat"
+        },
+        {
+            "image": "data/input/insert-2400000.dat",
+            "label": "data/output/insert-2400000.dat"
+        },
+        {
+            "image": "data/input/insert-980000.dat",
+            "label": "data/output/insert-980000.dat"
+        },
+        {
+            "image": "data/input/insert-2200000.dat",
+            "label": "data/output/insert-2200000.dat"
+        },
+        {
+            "image": "data/input/insert-1870000.dat",
+            "label": "data/output/insert-1870000.dat"
+        },
+        {
+            "image": "data/input/insert-580000.dat",
+            "label": "data/output/insert-580000.dat"
+        },
+        {
+            "image": "data/input/insert-1275000.dat",
+            "label": "data/output/insert-1275000.dat"
+        },
+        {
+            "image": "data/input/insert-150000.dat",
+            "label": "data/output/insert-150000.dat"
+        },
+        {
+            "image": "data/input/insert-2110000.dat",
+            "label": "data/output/insert-2110000.dat"
+        },
+        {
+            "image": "data/input/insert-535000.dat",
+            "label": "data/output/insert-535000.dat"
+        },
+        {
+            "image": "data/input/insert-1415000.dat",
+            "label": "data/output/insert-1415000.dat"
+        },
+        {
+            "image": "data/input/insert-255000.dat",
+            "label": "data/output/insert-255000.dat"
+        },
+        {
+            "image": "data/input/insert-1150000.dat",
+            "label": "data/output/insert-1150000.dat"
+        },
+        {
+            "image": "data/input/insert-1020000.dat",
+            "label": "data/output/insert-1020000.dat"
+        },
+        {
+            "image": "data/input/insert-100000.dat",
+            "label": "data/output/insert-100000.dat"
+        },
+        {
+            "image": "data/input/insert-1130000.dat",
+            "label": "data/output/insert-1130000.dat"
+        },
+        {
+            "image": "data/input/insert-1840000.dat",
+            "label": "data/output/insert-1840000.dat"
+        },
+        {
+            "image": "data/input/insert-1690000.dat",
+            "label": "data/output/insert-1690000.dat"
+        },
+        {
+            "image": "data/input/insert-380000.dat",
+            "label": "data/output/insert-380000.dat"
+        },
+        {
+            "image": "data/input/insert-2645000.dat",
+            "label": "data/output/insert-2645000.dat"
+        },
+        {
+            "image": "data/input/insert-425000.dat",
+            "label": "data/output/insert-425000.dat"
+        },
+        {
+            "image": "data/input/insert-475000.dat",
+            "label": "data/output/insert-475000.dat"
+        },
+        {
+            "image": "data/input/insert-2560000.dat",
+            "label": "data/output/insert-2560000.dat"
+        },
+        {
+            "image": "data/input/insert-2735000.dat",
+            "label": "data/output/insert-2735000.dat"
+        },
+        {
+            "image": "data/input/insert-1305000.dat",
+            "label": "data/output/insert-1305000.dat"
+        },
+        {
+            "image": "data/input/insert-1630000.dat",
+            "label": "data/output/insert-1630000.dat"
+        },
+        {
+            "image": "data/input/insert-1680000.dat",
+            "label": "data/output/insert-1680000.dat"
+        },
+        {
+            "image": "data/input/insert-1210000.dat",
+            "label": "data/output/insert-1210000.dat"
+        },
+        {
+            "image": "data/input/insert-2505000.dat",
+            "label": "data/output/insert-2505000.dat"
+        },
+        {
+            "image": "data/input/insert-2305000.dat",
+            "label": "data/output/insert-2305000.dat"
+        },
+        {
+            "image": "data/input/insert-1650000.dat",
+            "label": "data/output/insert-1650000.dat"
+        },
+        {
+            "image": "data/input/insert-355000.dat",
+            "label": "data/output/insert-355000.dat"
+        },
+        {
+            "image": "data/input/insert-1105000.dat",
+            "label": "data/output/insert-1105000.dat"
+        },
+        {
+            "image": "data/input/insert-1675000.dat",
+            "label": "data/output/insert-1675000.dat"
+        },
+        {
+            "image": "data/input/insert-2525000.dat",
+            "label": "data/output/insert-2525000.dat"
+        },
+        {
+            "image": "data/input/insert-2565000.dat",
+            "label": "data/output/insert-2565000.dat"
+        },
+        {
+            "image": "data/input/insert-1045000.dat",
+            "label": "data/output/insert-1045000.dat"
+        },
+        {
+            "image": "data/input/insert-1760000.dat",
+            "label": "data/output/insert-1760000.dat"
+        },
+        {
+            "image": "data/input/insert-1205000.dat",
+            "label": "data/output/insert-1205000.dat"
+        },
+        {
+            "image": "data/input/insert-35000.dat",
+            "label": "data/output/insert-35000.dat"
+        },
+        {
+            "image": "data/input/insert-460000.dat",
+            "label": "data/output/insert-460000.dat"
+        },
+        {
+            "image": "data/input/insert-1830000.dat",
+            "label": "data/output/insert-1830000.dat"
+        },
+        {
+            "image": "data/input/insert-1665000.dat",
+            "label": "data/output/insert-1665000.dat"
+        },
+        {
+            "image": "data/input/insert-1510000.dat",
+            "label": "data/output/insert-1510000.dat"
+        },
+        {
+            "image": "data/input/insert-1300000.dat",
+            "label": "data/output/insert-1300000.dat"
+        },
+        {
+            "image": "data/input/insert-2625000.dat",
+            "label": "data/output/insert-2625000.dat"
+        },
+        {
+            "image": "data/input/insert-1550000.dat",
+            "label": "data/output/insert-1550000.dat"
+        },
+        {
+            "image": "data/input/insert-1460000.dat",
+            "label": "data/output/insert-1460000.dat"
+        },
+        {
+            "image": "data/input/insert-125000.dat",
+            "label": "data/output/insert-125000.dat"
+        },
+        {
+            "image": "data/input/insert-105000.dat",
+            "label": "data/output/insert-105000.dat"
+        },
+        {
+            "image": "data/input/insert-740000.dat",
+            "label": "data/output/insert-740000.dat"
+        },
+        {
+            "image": "data/input/insert-1525000.dat",
+            "label": "data/output/insert-1525000.dat"
+        },
+        {
+            "image": "data/input/insert-1370000.dat",
+            "label": "data/output/insert-1370000.dat"
+        },
+        {
+            "image": "data/input/insert-385000.dat",
+            "label": "data/output/insert-385000.dat"
+        },
+        {
+            "image": "data/input/insert-2265000.dat",
+            "label": "data/output/insert-2265000.dat"
+        },
+        {
+            "image": "data/input/insert-1845000.dat",
+            "label": "data/output/insert-1845000.dat"
+        },
+        {
+            "image": "data/input/insert-2005000.dat",
+            "label": "data/output/insert-2005000.dat"
+        },
+        {
+            "image": "data/input/insert-555000.dat",
+            "label": "data/output/insert-555000.dat"
+        },
+        {
+            "image": "data/input/insert-2090000.dat",
+            "label": "data/output/insert-2090000.dat"
+        },
+        {
+            "image": "data/input/insert-1580000.dat",
+            "label": "data/output/insert-1580000.dat"
+        },
+        {
+            "image": "data/input/insert-1445000.dat",
+            "label": "data/output/insert-1445000.dat"
+        },
+        {
+            "image": "data/input/insert-2125000.dat",
+            "label": "data/output/insert-2125000.dat"
+        },
+        {
+            "image": "data/input/insert-510000.dat",
+            "label": "data/output/insert-510000.dat"
+        },
+        {
+            "image": "data/input/insert-950000.dat",
+            "label": "data/output/insert-950000.dat"
+        },
+        {
+            "image": "data/input/insert-2095000.dat",
+            "label": "data/output/insert-2095000.dat"
+        },
+        {
+            "image": "data/input/insert-700000.dat",
+            "label": "data/output/insert-700000.dat"
+        },
+        {
+            "image": "data/input/insert-1775000.dat",
+            "label": "data/output/insert-1775000.dat"
+        },
+        {
+            "image": "data/input/insert-1850000.dat",
+            "label": "data/output/insert-1850000.dat"
+        },
+        {
+            "image": "data/input/insert-850000.dat",
+            "label": "data/output/insert-850000.dat"
+        },
+        {
+            "image": "data/input/insert-1625000.dat",
+            "label": "data/output/insert-1625000.dat"
+        },
+        {
+            "image": "data/input/insert-115000.dat",
+            "label": "data/output/insert-115000.dat"
+        },
+        {
+            "image": "data/input/insert-1505000.dat",
+            "label": "data/output/insert-1505000.dat"
+        },
+        {
+            "image": "data/input/insert-470000.dat",
+            "label": "data/output/insert-470000.dat"
+        },
+        {
+            "image": "data/input/insert-2245000.dat",
+            "label": "data/output/insert-2245000.dat"
+        },
+        {
+            "image": "data/input/insert-820000.dat",
+            "label": "data/output/insert-820000.dat"
+        },
+        {
+            "image": "data/input/insert-30000.dat",
+            "label": "data/output/insert-30000.dat"
+        },
+        {
+            "image": "data/input/insert-2355000.dat",
+            "label": "data/output/insert-2355000.dat"
+        },
+        {
+            "image": "data/input/insert-2685000.dat",
+            "label": "data/output/insert-2685000.dat"
+        },
+        {
+            "image": "data/input/insert-1385000.dat",
+            "label": "data/output/insert-1385000.dat"
+        },
+        {
+            "image": "data/input/insert-2220000.dat",
+            "label": "data/output/insert-2220000.dat"
+        },
+        {
+            "image": "data/input/insert-75000.dat",
+            "label": "data/output/insert-75000.dat"
+        },
+        {
+            "image": "data/input/insert-1070000.dat",
+            "label": "data/output/insert-1070000.dat"
+        }
+    ],
+    "test_filenames": [
+        {
+            "image": "data/input/insert-2145000.dat",
+            "label": "data/output/insert-2145000.dat"
+        },
+        {
+            "image": "data/input/insert-350000.dat",
+            "label": "data/output/insert-350000.dat"
+        },
+        {
+            "image": "data/input/insert-130000.dat",
+            "label": "data/output/insert-130000.dat"
+        },
+        {
+            "image": "data/input/insert-1595000.dat",
+            "label": "data/output/insert-1595000.dat"
+        },
+        {
+            "image": "data/input/insert-710000.dat",
+            "label": "data/output/insert-710000.dat"
+        },
+        {
+            "image": "data/input/insert-590000.dat",
+            "label": "data/output/insert-590000.dat"
+        },
+        {
+            "image": "data/input/insert-1495000.dat",
+            "label": "data/output/insert-1495000.dat"
+        },
+        {
+            "image": "data/input/insert-1720000.dat",
+            "label": "data/output/insert-1720000.dat"
+        },
+        {
+            "image": "data/input/insert-45000.dat",
+            "label": "data/output/insert-45000.dat"
+        },
+        {
+            "image": "data/input/insert-2150000.dat",
+            "label": "data/output/insert-2150000.dat"
+        },
+         {
+            "image": "data/input/insert-940000.dat",
+            "label": "data/output/insert-940000.dat"
+        },
+        {
+            "image": "data/input/insert-1430000.dat",
+            "label": "data/output/insert-1430000.dat"
+        },
+        {
+            "image": "data/input/insert-55000.dat",
+            "label": "data/output/insert-55000.dat"
+        },
+        {
+            "image": "data/input/insert-855000.dat",
+            "label": "data/output/insert-855000.dat"
+        },
+        {
+            "image": "data/input/insert-2630000.dat",
+            "label": "data/output/insert-2630000.dat"
+        },
+        {
+            "image": "data/input/insert-570000.dat",
+            "label": "data/output/insert-570000.dat"
+        },
+        {
+            "image": "data/input/insert-2605000.dat",
+            "label": "data/output/insert-2605000.dat"
+        },
+        {
+            "image": "data/input/insert-2545000.dat",
+            "label": "data/output/insert-2545000.dat"
+        },
+        {
+            "image": "data/input/insert-2025000.dat",
+            "label": "data/output/insert-2025000.dat"
+        },
+        {
+            "image": "data/input/insert-235000.dat",
+            "label": "data/output/insert-235000.dat"
+        },
+        {
+            "image": "data/input/insert-2470000.dat",
+            "label": "data/output/insert-2470000.dat"
+        },
+        {
+            "image": "data/input/insert-1125000.dat",
+            "label": "data/output/insert-1125000.dat"
+        },
+        {
+            "image": "data/input/insert-2325000.dat",
+            "label": "data/output/insert-2325000.dat"
+        },
+        {
+            "image": "data/input/insert-725000.dat",
+            "label": "data/output/insert-725000.dat"
+        },
+        {
+            "image": "data/input/insert-485000.dat",
+            "label": "data/output/insert-485000.dat"
+        },
+        {
+            "image": "data/input/insert-2700000.dat",
+            "label": "data/output/insert-2700000.dat"
+        },
+        {
+            "image": "data/input/insert-1960000.dat",
+            "label": "data/output/insert-1960000.dat"
+        }
+    ],
+    "val_filenames": []
+}
