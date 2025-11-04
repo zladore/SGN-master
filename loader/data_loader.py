@@ -66,7 +66,7 @@ class ParticleDataLoader:
         if not train_files:
             raise ValueError("❌ 训练集文件列表为空，请检查配置文件")
 
-        print(f"找到 {len(train_files)} 个训练样本, {len(val_files)} 个验证样本, {len(test_files)} 个测试样本")
+        print(f"找到 {len(train_files)} 个训练样本, {len(test_files)} 个测试样本")
 
         # --- 数据加载器参数 ---
         dataset_config = self.config.get("dataset", {})

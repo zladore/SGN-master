@@ -120,12 +120,20 @@ class ResNet(nn.Module):
         self.in_planes = block_inplanes[0]
         self.no_max_pool = no_max_pool
 
-        self.conv1 = nn.Conv3d(n_input_channels,
-                               self.in_planes,
-                               kernel_size=(conv1_t_size, 7, 7),
-                               stride=(conv1_t_stride, 2, 2),
-                               padding=(conv1_t_size // 2, 3, 3),
-                               bias=False)
+        self.conv1 = nn.Conv3d(
+            n_input_channels,
+            self.in_planes,
+            kernel_size=(3, 3, 3),
+            stride=(1, 2, 2),
+            padding=(1, 1, 1),
+            bias=False
+        )
+        # self.conv1 = nn.Conv3d(n_input_channels,
+        #                        self.in_planes,
+        #                        kernel_size=(conv1_t_size, 7, 7),
+        #                        stride=(conv1_t_stride, 2, 2),
+        #                        padding=(conv1_t_size // 2, 3, 3),
+        #                        bias=False)
         self.bn1 = nn.BatchNorm3d(self.in_planes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool3d(kernel_size=3, stride=2, padding=1)
