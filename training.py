@@ -49,8 +49,8 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, device):
     # === ✅ 计算真实空间 MSE/MAE（如果归一化信息存在） ===
     mse_real, mae_real = np.nan, np.nan
     if hasattr(data_loader.dataset, "label_mean") and data_loader.dataset.label_mean is not None:
-        label_mean = torch.tensor(data_loader.dataset.label_mean).to(preds.device)
-        label_std = torch.tensor(data_loader.dataset.label_std).to(preds.device)
+        label_mean = torch.tensor(data_loader.dataset.label_mean).to(preds.device).unsqueeze(0)
+        label_std = torch.tensor(data_loader.dataset.label_std).to(preds.device).unsqueeze(0)
 
         preds_real = preds * label_std + label_mean
         labels_real = labels * label_std + label_mean

@@ -51,17 +51,23 @@ class ParticleDataset(Dataset):
     # ------------------------------
     def compute_normalization_parameters(self):
         print("计算input的标准化参数...")
-        input_sums = np.zeros(4)
-        input_sq_sums = np.zeros(4)
-        input_counts = np.zeros(4)
+        num_channels = 3
+        input_sums = np.zeros(num_channels)
+        input_sq_sums = np.zeros(num_channels)
+        input_counts = np.zeros(num_channels)
 
         for filename_info in self.filenames:
             input_filename = filename_info["image"]
             if not os.path.exists(input_filename):
                 continue
+            # input_data = np.loadtxt(input_filename)
+            # input_data = self._reshape_input_data(input_data)
+            ## 改成取前3列
             input_data = np.loadtxt(input_filename)
+            input_data = input_data[:, :3]  # 保留3列
             input_data = self._reshape_input_data(input_data)
-            for c in range(4):
+
+            for c in range(3):
                 flat = input_data[c].flatten()
                 input_sums[c] += np.sum(flat)
                 input_sq_sums[c] += np.sum(flat ** 2)
@@ -115,9 +121,13 @@ class ParticleDataset(Dataset):
     # ------------------------------
     def _reshape_input_data(self, input_data):
         """将输入(22500, 4) reshape 为 (C=4, D=3, H=250, W=30)"""
-        if input_data.shape != (22500, 4):
-            raise ValueError(f"Expected input shape (22500, 4), got {input_data.shape}")
-        input_data = input_data.reshape(3, 250, 30, 4)
+        if input_data.shape != (22500, 3):
+            raise ValueError(f"Expected input shape (22500, 3), got {input_data.shape}")
+
+        # reshape 为 (D, H, W, C) = (3,250,30,3)
+        input_data = input_data.reshape(3, 250, 30, 3)
+
+        # 转置为 (C, D, H, W)
         input_data = input_data.transpose(3, 0, 1, 2)
         return input_data
 
@@ -141,6 +151,7 @@ class ParticleDataset(Dataset):
 
         # --- 加载输入 ---
         input_data = np.loadtxt(input_path)
+        input_data = input_data[:, :3]  # 裁剪，只保留前三列
         input_data = self._reshape_input_data(input_data)
 
         # --- 加载标签 ---
@@ -156,7 +167,7 @@ class ParticleDataset(Dataset):
 
         # --- 输入归一化 ---
         if self.normalize_input and self.input_mean is not None and self.input_std is not None:
-            for c in range(4):
+            for c in range(3):
                 input_data[c] = self._normalize_data(input_data[c], self.input_mean[c], self.input_std[c])
         # --- 标签归一化 ---
         if self.normalize_label and self.label_mean is not None and self.label_std is not None:
