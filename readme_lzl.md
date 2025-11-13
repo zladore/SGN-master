@@ -30,6 +30,37 @@ python -m unet3d.scripts.train --config_filename data/particle_config.json`
 (4,4, 3, 250, 30)。这样，y维度（高度）被保留为空间维度之一，与输出（250个值对应每个y）对齐，模型更容易学习y方向的特征。
 输出是（batch_size,250），每个样本的输出是250个值，每个值对应一个y方向的密度值。
 
+目录结构：
+SGN-master/
+├── data/
+│   ├── input/
+│   ├── machine_configs/
+│   ├── norm_params/
+│   ├── output/
+│   ├── particle_config/particle_config.json
+│   └── split_dataset.py
+├── filePathCSV
+├── loader/
+│   ├── __init__.py
+│   ├── data_loader.py
+│   └── ParticleDataset.py
+├── models/
+│   ├── __init__.py
+│   ├── model_builder.py
+│   ├── resnet.py
+│   ├── resnext.py
+│   └── test_model_build.py
+├── splits/
+│   └── 结果/
+├── .gitignore
+├── LICENSE
+├── main.py
+├── readme_lzl.md
+├── requirements.txt
+├── test.py
+├── training.py
+└── utils.py
+
 下面是部分json文件代码：
 class ParticleLoaderConfig这个里面，到底应该放置什么内容，我还有一个data/particle_config/particle_config.json文件，部分内容如下：
 "model": {
@@ -100,3 +131,7 @@ class ParticleLoaderConfig这个里面，到底应该放置什么内容，我还
         },
 
 但是我是在晚上照的SGN处理vedio的还有词汇表之后的分类问题网络，我现在如何一步步把这个项目改成我自己的
+
+
+第五版：25.11.11
+修改目的：我之前用了4列数据，这次只用前3列，第4列可能是干扰数据  但是我发现只用3列并不好效果，所以又改成了4列，但其实效果不如第三版（176）  这个第五版是180多

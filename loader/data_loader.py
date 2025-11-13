@@ -153,17 +153,17 @@ class ParticleDataLoader:
 
         if len(valid_batch) == 0:
             # 如果整个批次都有错误，返回空批次
-            # return {
-            #     "image": torch.empty(0, 4, 3, 250, 30),
-            #     "label": torch.empty(0, 250),
-            #     "filename": []
-            # }
-            ##改成取前三个特征
             return {
-                "image": torch.empty(0, 3, 3, 250, 30),
+                "image": torch.empty(0, 4, 3, 250, 30),
                 "label": torch.empty(0, 250),
                 "filename": []
             }
+            ##改成取前三个特征
+            # return {
+            #     "image": torch.empty(0, 3, 3, 250, 30),
+            #     "label": torch.empty(0, 250),
+            #     "filename": []
+            # }
 
         # 提取有效数据
         images = torch.stack([item["image"] for item in valid_batch])

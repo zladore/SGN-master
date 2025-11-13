@@ -82,7 +82,7 @@ def run_inference(checkpoint_path=None, tag="auto_test"):
     label_mean = np.array(norm_params.get("label_mean", [0]))
     label_std = np.array(norm_params.get("label_std", [1]))
 
-    if input_mean.size != 3 or input_std.size != 3:
+    if input_mean.size != 4 or input_std.size != 4:
         raise ValueError(f"❌ input_mean/std 形状错误，应为长度3")
 
     # ---------------------------------------------------------------
