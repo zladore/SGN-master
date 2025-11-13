@@ -1,7 +1,7 @@
 {
     "model": {
         "name": "3DResNeXt101",
-        "in_channels": 3,
+        "in_channels": 4,
         "out_features": 250
     },
     "optimizer": {
@@ -1835,10 +1835,7 @@
         {
             "image": "data/input/insert-1905000.dat",
             "label": "data/output/insert-1905000.dat"
-        }
-    ],
-
-    "validation_filenames": [
+        },
         {
             "image": "data/input/insert-1950000.dat",
             "label": "data/output/insert-1950000.dat"
@@ -2184,6 +2181,52 @@
             "label": "data/output/insert-75000.dat"
         },
         {
+            "image": "data/input/insert-1070000.dat",
+            "label": "data/output/insert-1070000.dat"
+        }
+    ],
+    "test_filenames": [
+        {
+            "image": "data/input/insert-2145000.dat",
+            "label": "data/output/insert-2145000.dat"
+        },
+        {
+            "image": "data/input/insert-350000.dat",
+            "label": "data/output/insert-350000.dat"
+        },
+        {
+            "image": "data/input/insert-130000.dat",
+            "label": "data/output/insert-130000.dat"
+        },
+        {
+            "image": "data/input/insert-1595000.dat",
+            "label": "data/output/insert-1595000.dat"
+        },
+        {
+            "image": "data/input/insert-710000.dat",
+            "label": "data/output/insert-710000.dat"
+        },
+        {
+            "image": "data/input/insert-590000.dat",
+            "label": "data/output/insert-590000.dat"
+        },
+        {
+            "image": "data/input/insert-1495000.dat",
+            "label": "data/output/insert-1495000.dat"
+        },
+        {
+            "image": "data/input/insert-1720000.dat",
+            "label": "data/output/insert-1720000.dat"
+        },
+        {
+            "image": "data/input/insert-45000.dat",
+            "label": "data/output/insert-45000.dat"
+        },
+        {
+            "image": "data/input/insert-2150000.dat",
+            "label": "data/output/insert-2150000.dat"
+        },
+         {
             "image": "data/input/insert-940000.dat",
             "label": "data/output/insert-940000.dat"
         },
@@ -2250,52 +2293,7 @@
         {
             "image": "data/input/insert-1960000.dat",
             "label": "data/output/insert-1960000.dat"
-        },
-        {
-            "image": "data/input/insert-1070000.dat",
-            "label": "data/output/insert-1070000.dat"
         }
     ],
-    "test_filenames": [
-        {
-            "image": "data/input/insert-2145000.dat",
-            "label": "data/output/insert-2145000.dat"
-        },
-        {
-            "image": "data/input/insert-350000.dat",
-            "label": "data/output/insert-350000.dat"
-        },
-        {
-            "image": "data/input/insert-130000.dat",
-            "label": "data/output/insert-130000.dat"
-        },
-        {
-            "image": "data/input/insert-1595000.dat",
-            "label": "data/output/insert-1595000.dat"
-        },
-        {
-            "image": "data/input/insert-710000.dat",
-            "label": "data/output/insert-710000.dat"
-        },
-        {
-            "image": "data/input/insert-590000.dat",
-            "label": "data/output/insert-590000.dat"
-        },
-        {
-            "image": "data/input/insert-1495000.dat",
-            "label": "data/output/insert-1495000.dat"
-        },
-        {
-            "image": "data/input/insert-1720000.dat",
-            "label": "data/output/insert-1720000.dat"
-        },
-        {
-            "image": "data/input/insert-45000.dat",
-            "label": "data/output/insert-45000.dat"
-        },
-        {
-            "image": "data/input/insert-2150000.dat",
-            "label": "data/output/insert-2150000.dat"
-        }
-    ]
+    "val_filenames": []
 }
